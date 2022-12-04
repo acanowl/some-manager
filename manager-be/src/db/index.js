@@ -1,16 +1,16 @@
-require('./schema/User')
-
 const mongoose = require('mongoose')
+const registerSchema = require('./schema')
+const { mongodbPath } = require('./config')
 
 const connect = () => {
   return new Promise(resove => {
-    mongoose.connect('mongodb://127.0.0.1:27017/manager')
+    mongoose.connect(mongodbPath)
 
     mongoose.connection.on('open', () => {
-      console.log('连接成功')
+      console.log('数据库连接 -- successful')
       resove()
     })
   })
 }
 
-module.exports = { connect }
+module.exports = { connect, registerSchema }

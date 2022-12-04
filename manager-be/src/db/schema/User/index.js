@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
-const { getMeta } = require('../../config')
+const { commonMeta } = require('../../config')
 
 const UserSchema = new mongoose.Schema({
-  account: String,
-  password: String,
-
-  meta: getMeta()
+  data: {
+    account: String,
+    password: String
+  },
+  meta: commonMeta
 })
 
-mongoose.model('User', UserSchema)
+module.exports = UserSchema
