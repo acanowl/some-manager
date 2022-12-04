@@ -1,34 +1,43 @@
 {
   "name": "manager-fe",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build:dev": "vite build --mode development ",
+    "build:prod": "vite build --mode production ",
+    "build:stag": "vite build --mode staging ",
+    "serve": "vite preview"
   },
   "dependencies": {
-    "core-js": "^3.8.3",
-    "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "@element-plus/icons-vue": "^2.0.10",
+    "@vueuse/core": "^9.6.0",
+    "axios": "^0.24.0",
+    "element-plus": "^2.2.26",
+    "js-base64": "^3.7.2",
+    "js-cookie": "^3.0.1",
+    "pinia": "^2.0.13",
+    "pug": "^3.0.2",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "screenfull": "^6.0.0",
+    "vue": "^3.2.6",
+    "vue-router": "4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "@vue/eslint-config-airbnb": "^6.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-vue": "^8.0.3",
-    "eslint-plugin-vuejs-accessibility": "^1.1.0",
-    "lint-staged": "^11.1.2",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+    "@iconify-json/ep": "^1.1.8",
+    "@unocss/core": "^0.47.5",
+    "@unocss/extractor-pug": "^0.47.5",
+    "@vitejs/plugin-vue": "^1.6.0",
+    "@vue/cli-plugin-babel": "5.0.8",
+    "@vue/cli-plugin-eslint": "5.0.8",
+    "@vue/cli-service": "5.0.8",
+    "eslint": "8.21.0",
+    "eslint-plugin-vue": "9.3.0",
+    "unocss": "^0.47.5",
+    "unplugin-auto-import": "^0.12.0",
+    "unplugin-icons": "^0.14.14",
+    "unplugin-vue-components": "^0.22.11",
+    "vite": "^2.3.7",
+    "vite-plugin-vue-setup-extend": "^0.4.0"
   }
 }

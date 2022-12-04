@@ -1,17 +1,48 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from '@/views/auth/index.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { routes } from './routes.js'
+import { decode } from 'js-base64'
+import { useAppStore } from '@/store/modules/app'
 
-const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: HomeView,
-  },
-];
-
-const router = createRouter({
+export const router = createRouter({
   history: createWebHashHistory(),
-  routes,
-});
+  routes: [...routes],
+  scrollBehavior: () => ({ left: 0, top: 0 })
+})
 
-export default router;
+router.beforeEach((to, from, next) => {
+  const appStore = useAppStore()
+  document.title = (to.meta && to.meta.title) || ''
+  // 设置面包屑
+  const breadCrumbList = []
+  to.matched.forEach(item => {
+    breadCrumbList.push({ name: item.meta.title, path: item.path })
+  })
+  appStore.setBreadCrumb(breadCrumbList)
+  const jwt = sessionStorage.getItem('jwt') || ''
+
+  if (to.path === '/login') {
+    // 如果是登录状态 跳转到主页
+    jwt ? next('/') : next()
+  } else {
+    if (to.meta && to.meta.whiteList) {
+      next()
+    }
+    if (from.name === 'Login' && !jwt) {
+      next(false)
+      return false
+    }
+    if (jwt) {
+      if (Object.prototype.hasOwnProperty.call(to.meta, 'roles')) {
+        const roles = to.meta.roles || []
+        const { role } = jwt && JSON.parse(decode(jwt))
+        roles.includes(role) ? next() : next('/error')
+        return false
+      }
+      next()
+    } else {
+      next({ path: '/login' })
+    }
+  }
+})
+
+export default router
