@@ -6,12 +6,12 @@ html {
   font-size: 12px;
 }
 a {
-  color: #333;
+  color: var(--el-color-primary);
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #000;
+  color: var(--el-color-primary-light-3);
   text-decoration: none;
 }
 a:link {

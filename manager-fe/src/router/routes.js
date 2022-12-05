@@ -21,21 +21,23 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "login" */ '@/views/login/index.vue'),
     meta: { title: '登录' }
+  },
+  {
+    path: '/register',
+    component: () =>
+      import(/* webpackChunkName: "userRegister" */ '@/views/login/Register'),
+    meta: {
+      title: '注册'
+    }
+  },
+  {
+    path: '/reset-password',
+    component: () =>
+      import(/* webpackChunkName: "resetPassword" */ '@/views/login/ResetPwd'),
+    meta: {
+      title: '重置密码'
+    }
   }
-  // {
-  //   path: '/register',
-  //   component: () => import(/* webpackChunkName: "userRegister" */ '@/views/login/register'),
-  //   meta: {
-  //     title: '注册'
-  //   }
-  // },
-  // {
-  //   path: '/reset_password',
-  //   component: () => import(/* webpackChunkName: "resetPassword" */ '@/views/login/reset-pwd'),
-  //   meta: {
-  //     title: '重置密码'
-  //   }
-  // }
 ]
 
 export { routes, layoutMap }

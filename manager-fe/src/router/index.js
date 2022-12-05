@@ -5,7 +5,7 @@ import { useAppStore } from '@/store/modules/app'
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes: [...routes],
+  routes,
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 

@@ -31,7 +31,7 @@ axios.interceptors.response.use(
 export const get = (url, params = {}) =>
   new Promise((resolve, reject) =>
     axios
-      .get(url, { params })
+      .get(url, params)
       .then(response => resolve(response.data))
       .catch(reject)
   )
@@ -39,7 +39,7 @@ export const get = (url, params = {}) =>
 // post 方法封装
 export const post = (url, data = {}) =>
   new Promise((resolve, reject) => {
-    axios.post(url, { data }).then(response => resolve(response.data), reject)
+    axios.post(url, data).then(response => resolve(response.data), reject)
   })
 
 // 下载封装
