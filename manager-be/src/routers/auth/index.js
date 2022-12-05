@@ -9,22 +9,17 @@ const router = new Router({
 
 router.post('/register', async ctx => {
   const { account, password } = ctx.request.body
-  const user = new User({ account, password })
 
-  const isExist = user.findOne({ account })
+  const isExist = await User.findOne({ account }).exec()
   if (isExist) {
-    console.log('isExist')
-    ctx.body = {
-      code: -1,
-      data: {}
-    }
+    ctx.body = { code: -1, msg: '账号已存在', data: null }
     return
   }
-  ctx.body = {
-    code: 0,
-    data: {}
-  }
-  user.save()
+
+  const user = new User({ account, password })
+  const data = await user.save()
+
+  ctx.body = { code: 0, msg: '注册成功', data }
 })
 
 router.post('/login', async ctx => {

@@ -7,7 +7,7 @@ const connect = () => {
     mongoose.connect(mongodbPath)
 
     mongoose.connection.on('open', () => {
-      console.log('数据库连接 -- successful')
+      console.log('数据库连接 -- successfully')
       resove()
     })
   })

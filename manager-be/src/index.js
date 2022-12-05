@@ -23,7 +23,7 @@ const serviceStart = async () => {
   await registerModel(service)
   // 监听
   service.listen(servicePort, () => {
-    // console.log('监听成功')
+    console.log('监听成功')
   })
 }
 
