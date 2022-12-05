@@ -4,7 +4,7 @@ import 'uno.css'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
-import envVariables from '../public/env-variables.js'
+import envVariables from '../env-variables.js'
 import { registerGlobComp } from './components/'
 
 import App from './App.vue'
