@@ -5,8 +5,10 @@ el-button(circle type="info" @click="toggleDark()")
     i-ep-moon(v-else)
 </template>
 
-<script setup name="dark-mode">
+<script setup>
 import { useDark, useToggle } from '@vueuse/core'
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+
+defineOptions({ name: 'dark-mode' })
 </script>

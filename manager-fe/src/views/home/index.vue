@@ -2,7 +2,8 @@
 .flex-center 首页
 </template>
 
-<script setup name="page-home">
+<script setup>
+defineOptions({ name: 'page-home' })
 onMounted(() => { })
 </script>
 
