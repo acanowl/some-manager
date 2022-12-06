@@ -75,7 +75,7 @@ export const formRules = (type, maxlength, min, max) => {
     ],
     passwordRequired: [
       // 密码
-      { required: true, message: '不能为空', trigger: 'blur' },
+      { required: true, message: '密码不能为空', trigger: 'blur' },
       {
         pattern:
           /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>,./]).{6,16}$/,

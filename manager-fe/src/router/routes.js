@@ -23,19 +23,12 @@ const routes = [
     meta: { title: '登录' }
   },
   {
-    path: '/register',
-    component: () =>
-      import(/* webpackChunkName: "userRegister" */ '@/views/login/Register'),
-    meta: {
-      title: '注册'
-    }
-  },
-  {
     path: '/reset-password',
     component: () =>
-      import(/* webpackChunkName: "resetPassword" */ '@/views/login/ResetPwd'),
+      import(/* webpackChunkName: "resetPassword" */ '@/views/login/ResetPwd.vue'),
     meta: {
-      title: '重置密码'
+      title: '重置密码',
+      whiteList: true
     }
   }
 ]
