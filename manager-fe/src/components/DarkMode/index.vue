@@ -9,6 +9,8 @@ el-button(circle type="info" @click="toggleDark()")
 import { useDark, useToggle } from '@vueuse/core'
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+</script>
 
-defineOptions({ name: 'dark-mode' })
+<script>
+export default { name: 'dark-mode' }
 </script>

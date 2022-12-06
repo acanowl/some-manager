@@ -3,7 +3,6 @@
 </template>
   
 <script setup>
-defineOptions({ name: 'page-repwd' })
 
 </script>
   

@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'page-home' })
-onMounted(() => { })
 </script>
 
 <style lang="scss">
