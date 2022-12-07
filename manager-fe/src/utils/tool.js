@@ -18,3 +18,12 @@ export const filterAsyncRouter = (routerMap, roles) => {
   })
   return accessedRouters
 }
+
+/**
+ * 获取图片地址
+ * @param {*} name
+ * @returns
+ */
+export const getImageUrl = name => {
+  return new URL(`../assets/img/${name}.png`, import.meta.url).href
+}

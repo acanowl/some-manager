@@ -1,5 +1,5 @@
 <template lang="pug">
-.flex-center 首页
+.flex-center 概览页
 </template>
 
 <script setup>
