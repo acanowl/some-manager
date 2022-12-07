@@ -55,6 +55,13 @@ export default defineConfig({
       }
     ]
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import '@/assets/css/global.scss';`
+      }
+    }
+  },
   define: {
     buildTime: JSON.stringify(new Date().toLocaleString())
   },
@@ -71,7 +78,6 @@ export default defineConfig({
     proxy: {
       // 选项写法
       '/api': {
-        // target: 'http://jsonplaceholder.typicode.com',
         target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
