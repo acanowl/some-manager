@@ -14,7 +14,7 @@ section.flex.flex-1.of-auto
       i-ep-fold(v-else)
   .flex-1.flex-col.full-h
     top-bar
-    .layout-main.of-auto.flex-1.p-20px
+    .layout-main.of-auto.flex-1.p-20px.min-w-732px
       router-view(v-slot="{ Component, route }")
         component(:is="Component" :key="route.fullPath")
 </template>
