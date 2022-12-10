@@ -1,5 +1,5 @@
 <template lang="pug">
-.goods 
+el-card.goods.flex-1(shadow="always")
   form-search(:form-item="formItem" :form-data="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
 </template>

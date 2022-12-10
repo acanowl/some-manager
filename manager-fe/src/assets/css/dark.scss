@@ -25,7 +25,7 @@ html.dark {
     border-color: var(--el-border-color-light);
   }
   .layout-collapse {
-    border-color: var(--el-border-color-light);
+    border-color: var(--el-border-color-light) !important;
   }
   .layout-topbar {
     background-color: var(--el-bg-color-overlay);

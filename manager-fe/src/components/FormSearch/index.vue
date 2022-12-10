@@ -3,7 +3,7 @@
   el-form.flex-1.pr-20px(v-if="formItem && formItem.length > 0" :inline="true" :model="formData" label-position="right")
     el-row
       el-col(v-for="(item, index) in formItem" :key="index" :xs="8" :sm="8" :md="8" :lg="6" :xl="6")
-        el-form-item(:key="index" :label="item.label" :prop="item.value")
+        el-form-item.important-mb-0(:key="index" :label="item.label" :prop="item.value")
           //- 下拉
           el-select(v-if="item.type === 'select'" v-model="formData[item.value]" clearable placeholder="请选择")
             el-option(v-for="(option,i) in item.children" :key="i" :value="option.value" :label="option.label")

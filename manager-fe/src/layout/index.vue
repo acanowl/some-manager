@@ -5,7 +5,7 @@ header.layout-header.flex.justify-between.h-58px.bg-deep-green.px-20px
     .text-2xl.font-bold.color-white {{ systemName }}
   .flex-center
     dark-mode
-section.flex.flex-1.of-auto
+section.layout-section.flex.flex-1.of-auto
   .layout-side.flex-col.flex-shrink-0.bg-white.w-260px(:class="{ 'w-65px': isMenuCollapse }")
     .flex-1.of-auto.of-x-hidden
       the-menu(:collapse="isMenuCollapse")
@@ -14,7 +14,7 @@ section.flex.flex-1.of-auto
       i-ep-fold(v-else)
   .flex-1.flex-col.full-h
     top-bar
-    .layout-main.of-auto.flex-1.p-20px.min-w-732px
+    .layout-main.of-auto.flex-1.flex-col.p-20px.min-w-732px
       router-view(v-slot="{ Component, route }")
         component(:is="Component" :key="route.fullPath")
 </template>
@@ -36,17 +36,19 @@ export default { name: 'the-layout' }
 </script>
 
 <style lang="scss">
-.layout-side {
-  box-shadow: 2px 0 8px 0 rgba($color: $color-deep-green, $alpha: 0.05);
-  border-right: 1px solid $color-mute;
-  transition: width 0.3s;
+.layout-section {
+  .layout-side {
+    box-shadow: 2px 0 8px 0 rgba($color: $color-deep-green, $alpha: 0.05);
+    border-right: 1px solid $color-mute;
+    transition: width 0.3s;
 
-  .layout-collapse {
-    border-top: 1px solid $color-mute;
+    .layout-collapse {
+      border-top: 1px solid $color-mute;
+    }
   }
 
   .layout-main {
-    background-color: #fbfbfb;
+    background-color: #fcfcfc;
   }
 }
 </style>
