@@ -12,11 +12,12 @@ section.layout-section.flex.flex-1.of-auto
     .layout-collapse.h-50px.flex-center.cursor-pointer(@click="isMenuCollapse = !isMenuCollapse")
       i-ep-expand(v-if="isMenuCollapse")
       i-ep-fold(v-else)
-  .flex-1.flex-col.full-h
+  .flex-1.flex-col.full-h.of-auto
     top-bar
-    .layout-main.of-auto.flex-1.flex-col.p-20px.min-w-732px
-      router-view(v-slot="{ Component, route }")
-        component(:is="Component" :key="route.fullPath")
+    .of-auto.flex-1.flex
+      .layout-main.of-auto.flex-1.flex-col.p-20px.min-w-732px
+        router-view(v-slot="{ Component, route }")
+          component(:is="Component" :key="route.fullPath")
 </template>
 
 <script setup>
@@ -38,7 +39,6 @@ export default { name: 'the-layout' }
 <style lang="scss">
 .layout-section {
   .layout-side {
-    box-shadow: 2px 0 8px 0 rgba($color: $color-deep-green, $alpha: 0.05);
     border-right: 1px solid $color-mute;
     transition: width 0.3s;
 
