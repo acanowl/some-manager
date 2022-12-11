@@ -1,14 +1,14 @@
 <template lang="pug">
-.the-table(v-loading="isLoading")
-  el-table(v-bind="$attrs" :data="tableData" :row-key="rowKey" :key="toggleIndex" ref="theTableRef" height="100%" :border="config.border" :stripe="config.stripe" @sort-change="sortChange")
+.the-table(v-loading="isLoading" :style="cptHeight")
+  el-table(:data="tableData" :row-key="rowKey" :key="toggleIndex" ref="theTableRef" height="100%" :border="config.border" :stripe="config.stripe" @sort-change="sortChange")
     slot
-    el-table-column(v-for="(item, index) in column" :key="index" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :filters="item.filters" :show-overflow-tooltip="item.showOverflowTooltip")
+    el-table-column(v-for="(item, index) in column" :key="index" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :show-overflow-tooltip="item.showOverflowTooltip")
       template(#default="scope")
         slot(:name="item.prop" v-bind="scope") {{ scope.row[item.prop] }}
     el-table-column(min-width="1")
     template(#empty)
       el-empty(:description="emptyText" :image-size="100")
-el-pagination(v-if="!hidePagination" :layout="paginationLayout" :total="total" :page-size="currentPageSize" :page-sizes="pageSizes" v-model:currentPage="currentPage" @current-change="paginationChange" @update:page-size="pageSizeChange")
+  el-pagination.pt-10px(v-if="!hidePagination" :layout="paginationLayout" :total="total" :page-size="currentPageSize" :page-sizes="pageSizes" v-model:currentPage="currentPage" @current-change="paginationChange" @update:page-size="pageSizeChange")
 </template>
 
 <script setup>
@@ -20,7 +20,7 @@ const theTableRef = ref(null)
 const props = defineProps({
   requestApi: Function,
   params: { type: Object, default: () => ({}) },
-  data: { type: Object, default: () => { } },
+  data: { type: Array, default: () => ([]) },
   border: { type: Boolean, default: false },
   stripe: { type: Boolean, default: false },
   pageSize: { type: Number, default: defaultConfig.pageSize },
@@ -29,12 +29,15 @@ const props = defineProps({
   column: { type: Array, default: () => [] },
   remoteSort: { type: Boolean, default: false }, // 远程排序
   hidePagination: { type: Boolean, default: false },
-  paginationLayout: { type: String, default: defaultConfig.paginationLayout }
+  paginationLayout: { type: String, default: defaultConfig.paginationLayout },
+  innerPadding: { type: [String, Number], default: '0' },
 })
 
 const emits = defineEmits(['dataChange'])
 
-const config = relative({ border: props.border, stripe: props.stripe })
+const cptHeight = computed(() => ({ height: props.hidePagination ? '100%' : `calc( 100% - 32px - ${props.innerPadding})` }))
+
+const config = reactive({ border: props.border, stripe: props.stripe })
 
 // 是否需要请求接口
 const isNeedRequest = () => typeof props.requestApi === 'function'
@@ -63,7 +66,7 @@ let total = ref(0)
 let currentPage = ref(1)
 let currentPageSize = toRef(props.pageSize)
 // 分页点击
-const paginationChange = getData
+const paginationChange = () => getData()
 // 条数变化
 const pageSizeChange = size => {
   currentPageSize.value = size
@@ -131,7 +134,7 @@ const getData = async () => {
     }
   } else {
     tableData.value = props.data
-    total.value = tableDatatotal.value.length
+    total.value = tableData.value.length
   }
   isLoading.value = false
 }
@@ -139,15 +142,18 @@ const getData = async () => {
 // 获取数据
 onMounted(() => getData())
 
-// FIXME 待验证方法可行性
 // 插入行 unshiftRow
-const unshiftRow = row => {
-  tableData.value.unshift(row)
-}
+const unshiftRow = row => tableData.value.unshift(row)
 // 插入行 pushRow
-const pushRow = row => {
-  tableData.value.push(row)
-}
+const pushRow = row => tableData.value.push(row)
+
+// 根据index覆盖数据
+const updateIndex = (row, index) => Object.assign(tableData.value[index], row)
+// 根据index删除
+const removeIndex = index => tableData.value.splice(index, 1)
+// 根据index批量删除
+const removeIndexes = (indexes = []) => indexes.forEach(index => tableData.value.splice(index, 1))
+
 // 根据key覆盖数据
 const updateKey = (row, rowKey = this.rowKey) => {
   tableData.value
@@ -155,20 +161,6 @@ const updateKey = (row, rowKey = this.rowKey) => {
     .forEach(item => {
       Object.assign(item, row)
     })
-}
-// 根据index覆盖数据
-const updateIndex = (row, index) => {
-  Object.assign(tableData.value[index], row)
-}
-// 根据index删除
-const removeIndex = index => {
-  tableData.value.splice(index, 1)
-}
-// 根据index批量删除
-const removeIndexes = (indexes = []) => {
-  indexes.forEach(index => {
-    tableData.value.splice(index, 1)
-  })
 }
 // 根据key删除
 const removeKey = (key, rowKey = this.rowKey) => {
@@ -185,17 +177,48 @@ const removeKeys = (keys = [], rowKey = this.rowKey) => {
   })
 }
 
-// FIXME 待测试是否可通过父组件直接获取内部ref
-const clearSelection = () => theTableRef?.clearSelection()
-const toggleRowSelection = (row, selected) => theTableRef?.toggleRowSelection(row, selected)
-const toggleAllSelection = () => theTableRef?.toggleAllSelection()
-const setCurrentRow = row => theTableRef?.setCurrentRow(row)
-const clearSort = () => theTableRef?.clearSort()
-const doLayout = () => theTableRef?.doLayout()
-const sort = (prop, order) => theTableRef?.sort(prop, order)
+// element plus el-table 原生方法
+const toggleRowSelection = (row, selected) => theTableRef.value?.toggleRowSelection(row, selected)
+const clearSelection = () => theTableRef.value?.clearSelection()
+const setCurrentRow = row => theTableRef.value?.setCurrentRow(row)
+const doLayout = () => theTableRef.value?.doLayout()
+// 'ascending' 'descending'
+const sort = (prop, order) => theTableRef.value?.sort(prop, order)
+const clearSort = () => theTableRef.value?.clearSort()
+const toggleAllSelection = () => theTableRef.value?.toggleAllSelection()
 
+defineExpose({
+  refresh,
+  upData,
+  reload,
+
+  unshiftRow,
+  pushRow,
+  updateKey,
+  updateIndex,
+  removeIndex,
+  removeIndexes,
+  removeKey,
+  removeKeys,
+
+  clearSelection,
+  toggleRowSelection,
+  toggleAllSelection,
+  setCurrentRow,
+  clearSort,
+  doLayout,
+  sort
+})
 </script>
 
 <script>
 export default { name: 'the-table' }
 </script>
+
+<style lang="scss">
+.the-table {
+  .el-pagination {
+    justify-content: flex-end;
+  }
+}
+</style>
