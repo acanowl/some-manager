@@ -2,10 +2,12 @@
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:form-item="formItem" :form-data="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
-  the-table.pt-20px(ref="goodsTableRef" :data="tableData" :column="tableColumn" :innerPadding="cptInnerPadding")
+  the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
 </template>
 
 <script setup>
+import { goodsListApi } from '@/api'
+
 const goodsTableRef = ref(null)
 
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
@@ -30,9 +32,17 @@ const formItem = [
 const formData = reactive({ name: '', author: '', type: '' })
 
 const tableColumn = [
+  // {
+  //   prop: 'id',
+  //   label: 'ID',
+  //   // width: '120',
+  //   sortable: false,
+  //   fixed: false,
+  //   showOverflowTooltip: false
+  // },
   {
-    prop: 'id',
-    label: 'ID',
+    prop: 'name',
+    label: '名字',
     // width: '120',
     sortable: false,
     fixed: false,
@@ -47,16 +57,8 @@ const tableColumn = [
     showOverflowTooltip: false
   },
   {
-    prop: 'name',
-    label: '名字',
-    // width: '120',
-    sortable: false,
-    fixed: false,
-    showOverflowTooltip: false
-  },
-  {
-    prop: 'address',
-    label: '地址',
+    prop: 'price',
+    label: '价格',
     // width: '120',
     sortable: false,
     fixed: false,
@@ -64,35 +66,9 @@ const tableColumn = [
   },
 ]
 
-let tableData = reactive([
-  {
-    id: 1,
-    date: '2016-05-02',
-    name: 'wangxiaohu',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    id: 2,
-    date: '2016-05-04',
-    name: 'wangxiaohu',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    id: 3,
-    date: '2016-05-01',
-    name: 'wangxiaohu',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 4,
-    date: '2016-05-03',
-    name: 'wangxiaohu',
-    address: 'No. 189, Grove St, Los Angeles',
-  }
-])
-
 const getList = val => {
   console.log('查询数据', val)
+  goodsTableRef.value.refresh()
 }
 
 const onAddClick = () => {

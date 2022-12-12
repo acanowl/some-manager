@@ -9,12 +9,12 @@ export default {
   paginationLayout: 'prev, pager, next',
   // 数据统一转换
   parseData: res => {
-    const { data, message, code } = res || {}
+    const { data, msg, code } = res || {}
     return {
       data, // 无分页的数据字段结构
-      rows: data.rows, // 行数据字段结构
-      total: data.total, // 总数字段结构
-      msg: message, // 描述字段结构
+      rows: data?.rows, // 行数据字段结构
+      total: data?.total, // 总数字段结构
+      msg, // 描述字段结构
       code // 状态字段结构
     }
   },

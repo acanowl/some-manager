@@ -120,17 +120,17 @@ const getData = async () => {
     try {
       const res = await props.requestApi(reqData)
       const response = parseData(res)
-      if (response.code === successCode) {
+      if (response.code === successCode && res.data) {
         emptyText.value = '暂无数据'
         tableData.value = (props.hidePagination ? response.data : response.rows) || []
         total.value = response.total || 0
         theTableRef.setScrollTop(0)
         emits('dataChange', res, tableData.value)
       } else {
-        emptyText.value = response.msg
+        emptyText.value = response.code === successCode ? '暂无数据' : response.msg
       }
     } catch (error) {
-      emptyText.value = error.statusText || '数据格式错误'
+      emptyText.value = error.msg || '数据格式错误'
     }
   } else {
     tableData.value = props.data

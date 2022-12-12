@@ -1,4 +1,4 @@
-import { post } from '@/utils/axios.js'
+import { post, get } from '@/utils/axios.js'
 
 const prefix = '/goods'
 
