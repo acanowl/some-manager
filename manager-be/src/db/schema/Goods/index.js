@@ -3,6 +3,7 @@ const { getMeta } = require('../../config')
 
 const GoodsSchema = new mongoose.Schema({
   name: String,
+  author: String,
   date: String,
   classfiy: String,
   price: Number,
