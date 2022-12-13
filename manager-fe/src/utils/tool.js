@@ -27,3 +27,10 @@ export const filterAsyncRouter = (routerMap, roles) => {
 export const getImageUrl = name => {
   return new URL(`../assets/img/${name}.png`, import.meta.url).href
 }
+
+/**
+ * 拷贝
+ * @param {*} value
+ * @returns
+ */
+export const clone = value => JSON.parse(JSON.stringify(value))

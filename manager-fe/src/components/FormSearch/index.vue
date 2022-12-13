@@ -1,16 +1,6 @@
 <template lang="pug">
 .flex.justify-between
-  el-form.flex-1.pr-20px(v-if="formItem && formItem.length > 0" :inline="true" :model="formData" label-position="right")
-    el-row
-      el-col(v-for="(item, index) in formItem" :key="index" :xs="8" :sm="8" :md="8" :lg="6" :xl="6")
-        el-form-item.important-mb-0(:key="index" :label="item.label" :prop="item.value")
-          //- 下拉
-          el-select(v-if="item.type === 'select'" v-model="formData[item.value]" clearable placeholder="请选择")
-            el-option(v-for="(option,i) in item.children" :key="i" :value="option.value" :label="option.label")
-          //- 文本
-          el-input(v-if="item.type === 'text'" v-model="formData[item.value]" clearable placeholder="请输入")
-          //- 日期
-          el-date-picker(v-if="item.type === 'daterange'" v-model="formData[item.value]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期")
+  the-form.flex-1.pr-20px(:formItem="filterFormItem" :formData="state.form" :noPd="true" @change="changeHandle")
   .flex-shrink-0
     el-button(type="primary" @click="searchForm") 查询
     el-button(@click="clearData") 重置
@@ -18,19 +8,34 @@
 </template>
 
 <script setup>
-const { formData } = defineProps({
-  // form查询项
+import { clone } from '@/utils/tool'
+
+const { formItem, formData } = defineProps({
+  // 表单
   formItem: { type: Array, default: () => [] },
-  // form查询数据
-  formData: { type: Object, default: () => {} }
+  // 表单数据
+  formData: { type: Object, default: () => { } }
 })
+
+const state = reactive({ form: {} })
+state.form = clone(formData)
+
+// 目前仅提供下拉 文本及日期筛选
+const formTypeLimit = ['select', 'text', 'daterange']
+const filterFormItem = formItem.filter(item => formTypeLimit.includes(item.type))
+
 const emits = defineEmits(['searchForm', 'clearForm'])
 
-const searchForm = () => emits('searchForm', formData)
+const searchForm = () => emits('searchForm', state.form)
+
+// FIXME 修改为v-model:formData的形式
+const changeHandle = (data, val) => {
+  state.form = clone(data)
+}
 
 // 清空搜索栏
 const clearData = () => {
-  Object.keys(formData).forEach(key => (formData[key] = ''))
+  Object.keys(state.form).forEach(key => (state.form[key] = ''))
   emits('clearForm')
 }
 </script>
