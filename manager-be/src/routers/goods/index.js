@@ -36,7 +36,7 @@ router.get('/list', async ctx => {
   ctx.body = {
     code: 0,
     msg: 'success',
-    data: list
+    data: null
   }
 })
 
