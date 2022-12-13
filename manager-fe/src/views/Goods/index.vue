@@ -2,36 +2,42 @@
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="formItem" :formData="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
-  the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
+  the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" hidePagination :innerPadding="cptInnerPadding")
 form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
-import { goodsListApi } from '@/api'
+// , goodsUpdateApi // 编辑
+import { goodsListApi, goodsAddApi } from '@/api'
+import { useDateFormat } from '@vueuse/shared'
 
 const goodsTableRef = ref(null)
 const goodsAddRef = ref(null)
 
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 
+const classfiyMap = [
+  { label: '小说', value: '0' },
+  { label: '文学', value: '1' },
+  { label: '科技', value: '2' },
+  { label: '经济', value: '3' },
+  { label: '法律', value: '4' },
+  { label: '历史', value: '5' },
+  { label: '哲学', value: '6' },
+  { label: '艺术', value: '7' }
+]
+
 const formItem = [
-  { label: '书名', value: 'name', type: 'text' },
-  { label: '作者', value: 'author', type: 'text' },
+  // name, date, classfiy, price
+  { label: '书名', prop: 'name', type: 'text' },
+  { label: '作者', prop: 'author', type: 'text' },
+  { label: '出版日期', prop: 'date', type: 'date' },
   {
-    label: '类型', value: 'type', type: 'select',
-    children: [
-      { label: '小说', value: '0' },
-      { label: '文学', value: '1' },
-      { label: '科技', value: '2' },
-      { label: '经济', value: '3' },
-      { label: '法律', value: '4' },
-      { label: '历史', value: '5' },
-      { label: '哲学', value: '6' },
-      { label: '艺术', value: '7' }
-    ]
+    label: '类型', prop: 'classfiy', type: 'select',
+    children: classfiyMap
   }
 ]
-const formData = reactive({ name: '', author: '', type: '', daterange: '' })
+const formData = reactive({ name: '', author: '', date: '', classfiy: '' })
 
 const tableColumn = [
   {
@@ -39,14 +45,29 @@ const tableColumn = [
     label: '名字',
     sortable: false,
     fixed: false,
-    showOverflowTooltip: false
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'author',
+    label: '作者',
+    sortable: false,
+    fixed: false,
+    showOverflowTooltip: true
   },
   {
     prop: 'date',
-    label: '时间',
+    label: '出版日期',
     sortable: false,
     fixed: false,
     showOverflowTooltip: false
+  },
+  {
+    prop: 'classfiy',
+    label: '类型',
+    sortable: false,
+    fixed: false,
+    showOverflowTooltip: false,
+    format: val => classfiyMap.filter(item => item.value == val)[0]?.label
   },
   {
     prop: 'price',
@@ -63,12 +84,18 @@ const getList = val => {
 }
 
 const onAddClick = () => {
-  console.log('新增数据')
   goodsAddRef.value.show('add')
 }
-
-const submitHandle = data => {
-  console.log(data, 'xx')
+const submitHandle = async data => {
+  try {
+    const res = await goodsAddApi(data)
+    const { msg: message = '', code } = res || {}
+    const isSuccess = code !== -1
+    ElMessage({ message, type: isSuccess ? 'success' : 'error' })
+    isSuccess && goodsTableRef.value.refresh()
+  } catch (error) {
+    console.log('error submit!', error)
+  }
 }
 
 </script>

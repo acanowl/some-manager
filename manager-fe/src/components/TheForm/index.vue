@@ -2,34 +2,119 @@
 el-form.form(ref="commonFormRef" v-if="formItem && formItem.length > 0" :rules="rules" :model="state.form" :inline="true" label-position="right" v-bind="{ 'label-width': labelWidth, ...$attrs }")
   el-row
     el-col(v-for="(item, index) in formItem" :key="index" v-bind="cptColSpan")
-      el-form-item(:class="{'important-mb-0': noPd }" :key="index" :label="item.label" :prop="item.value")
+      el-form-item(:class="{'important-mb-0': noPd }" :key="index" :label="item.label" :prop="item.prop")
         //- 下拉框
-        el-select(v-if="item.type === 'select'" v-model="state.form[item.value]" clearable :filterable="item.filterable ? item.filterable : false" :multiple="item.multiple ? item.multiple : false" :disabled="item.disabled" :placeholder="`请选择${item.placeholder || ''}`" @change="emits('change', state.form, item.value)")
+        el-select(
+          v-if="item.type === 'select'"
+          v-model="state.form[item.prop]"
+          clearable
+          :filterable="item.filterable || false"
+          :multiple="item.multiple || false"
+          :disabled="item.disabled"
+          :placeholder="`请选择${item.placeholder || ''}`"
+          @change="emits('change', state.form, item.prop)")
           el-option(v-for="(option, i) in item.children" :key="i" :value="option.value" :label="option.label")
         //- 文本框
-        el-input(v-if="item.type === 'text'" :id="item.value" v-model.trim="state.form[item.value]" clearable :placeholder="item.disabled === true ? '' : `请输入${item.placeholder || ''}`" :maxlength="item.maxlength" :oninput="emits('oninput', state.form, item)" :disabled="item.disabled" @change="emits('change', state.form, item.value)")
+        el-input(
+          v-if="item.type === 'text'"
+          :id="item.prop"
+          v-model.trim="state.form[item.prop]"
+          clearable
+          :placeholder="item.disabled === true ? '' : `请输入${item.placeholder || ''}`"
+          :maxlength="item.maxlength"
+          :oninput="emits('oninput', state.form, item)"
+          :disabled="item.disabled"
+          @change="emits('change', state.form, item.prop)")
         //- 密码框
-        el-input(v-if="item.type === 'password'" v-model="state.form[item.value]" type="password" :placeholder="item.placeholder ? item.placeholder : '请输入'" show-password :disabled="item.disabled")
+        el-input(
+          v-if="item.type === 'password'"
+          v-model="state.form[item.prop]"
+          type="password"
+          :placeholder="item.placeholder ? item.placeholder : '请输入'"
+          show-password
+          :disabled="item.disabled")
         //- 数字
-        el-input(v-if="item.type === 'number'" :id="item.value" v-model.number="state.form[item.value]" clearable :placeholder="item.disabled === true ? '' : `请输入${item.placeholder || ''}`" :maxlength="item.maxlength" :oninput="emits('oninput', state.form, item)" :disabled="item.disabled" @change="emits('change', state.form, item.value)")
+        el-input(
+          v-if="item.type === 'number'"
+          :id="item.prop"
+          v-model.number="state.form[item.prop]"
+          clearable
+          :placeholder="item.disabled === true ? '' : `请输入${item.placeholder || ''}`"
+          :maxlength="item.maxlength"
+          :oninput="emits('oninput', state.form, item)"
+          :disabled="item.disabled"
+          @change="emits('change', state.form, item.prop)")
         //- 文本域
-        el-input(v-if="item.type === 'textarea'" v-model="state.form[item.value]" clearable :rows="item.rows ? item.rows : 3" type="textarea" :placeholder="`${item.placeholder || ''}`" :maxlength="item.maxlength" show-word-limit resize="none")
+        el-input(
+          v-if="item.type === 'textarea'"
+          v-model="state.form[item.prop]"
+          clearable :rows="item.rows ? item.rows : 3"
+          type="textarea" :placeholder="`${item.placeholder || ''}`"
+          :maxlength="item.maxlength"
+          show-word-limit resize="none")
         //- 颜色选择
-        el-color-picker(v-if="item.type === 'colorPicker'" :predefine="item.predefine || []" v-model="state.form[item.value]")
+        el-color-picker(
+          v-if="item.type === 'colorPicker'"
+          :predefine="item.predefine || []"
+          v-model="state.form[item.prop]")
         //- 单选
-        el-radio-group(v-if="item.type === 'radio'" v-model="state.form[item.value]" :disabled="item.disabled" @change="emits('change', state.form, item.value)")
+        el-radio-group(
+          v-if="item.type === 'radio'"
+          v-model="state.form[item.prop]"
+          :disabled="item.disabled"
+          @change="emits('change', state.form, item.prop)")
           el-radio(v-for="option in item.children" :key="option.value" :label="option.value") {{ option.label }}
         //- 联级选择器
-        el-cascader(v-if="item.type === 'cascader'" v-model="state.form[item.value]" :options="item.children" :props="item.props" :show-all-levels="false" :disabled="item.disabled" @change="handleChange")
+        el-cascader(
+          v-if="item.type === 'cascader'"
+          v-model="state.form[item.prop]"
+          :options="item.children"
+          :props="item.props"
+          :show-all-levels="false"
+          :disabled="item.disabled"
+          @change="handleChange")
         //- 日期
-        el-date-picker(v-if="item.type === 'date'" v-model="state.form[item.value]" type="date" :disabled="item.disabled" placeholder="选择日期")
+        el-date-picker(
+          v-if="item.type === 'date'"
+          v-model="state.form[item.prop]"
+          type="date"
+          value-format="YYYY-MM-DD"
+          :disabled="item.disabled"
+          placeholder="选择日期")
         //- 日期
-        el-date-picker(v-if="item.type === 'daterange'" v-model="state.form[item.value]" type="daterange" :disabled="item.disabled" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期")
+        el-date-picker(
+          v-if="item.type === 'daterange'"
+          v-model="state.form[item.prop]"
+          type="daterange"
+          value-format="YYYY-MM-DD"
+          :disabled="item.disabled"
+          start-placeholder="开始日期"
+          range-separator="至"
+          end-placeholder="结束日期")
         //- 上传
-        el-upload.upload-file(v-if="item.type === 'upload'" ref="uploadRef" :action="''" :accept="item.accept" :http-request="uploadFile" :before-upload="beforeUpload" :on-remove="onRemove" :limit="item.limit" :multiple="item.multiple" :on-exceed="handleExceed" :file-list="state.form.fileList")
+        el-upload(
+          v-if="item.type === 'upload'"
+          ref="uploadRef"
+          :action="''"
+          :accept="item.accept"
+          :http-request="uploadFile"
+          :before-upload="beforeUpload"
+          :on-remove="onRemove"
+          :limit="item.limit"
+          :multiple="item.multiple"
+          :on-exceed="handleExceed"
+          :file-list="state.form.fileList")
           el-button(size="small" type="primary") 点击上传
         //- 上传图片
-        el-upload(v-if="item.type === 'uploadCard'" action="#" :accept="item.accept" list-type="picture-card" :on-remove="onRemove" :on-exceed="handleExceed" :http-request="httpRequest" :file-list="state.form[item.value]")
+        el-upload(
+          v-if="item.type === 'uploadCard'"
+          action="#"
+          :accept="item.accept"
+          list-type="picture-card"
+          :on-remove="onRemove"
+          :on-exceed="handleExceed"
+          :http-request="httpRequest"
+          :file-list="state.form[item.prop]")
           el-icon
             Plus
 </template>

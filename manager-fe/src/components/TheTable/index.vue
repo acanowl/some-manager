@@ -4,7 +4,7 @@
     slot
     el-table-column(v-for="(item, index) in column" :key="index" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :show-overflow-tooltip="item.showOverflowTooltip")
       template(#default="scope")
-        slot(:name="item.prop" v-bind="scope") {{ scope.row[item.prop] }}
+        slot(:name="item.prop" v-bind="scope") {{ item.format ? item.format(scope.row[item.prop]) :  scope.row[item.prop] }}
     el-table-column(min-width="1")
     template(#empty)
       el-empty(:description="emptyText" :image-size="100")
@@ -124,7 +124,7 @@ const getData = async () => {
         emptyText.value = '暂无数据'
         tableData.value = (props.hidePagination ? response.data : response.rows) || []
         total.value = response.total || 0
-        theTableRef.setScrollTop(0)
+        theTableRef.value.setScrollTop(0)
         emits('dataChange', res, tableData.value)
       } else {
         emptyText.value = response.code === successCode ? '暂无数据' : response.msg
