@@ -2,21 +2,21 @@
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="formItem" :formData="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
-  the-form(:formItem="formItem" :formData="formData" :noPd="true")
   the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
+form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData")
 </template>
 
 <script setup>
 import { goodsListApi } from '@/api'
 
 const goodsTableRef = ref(null)
+const goodsAddRef = ref(null)
 
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 
 const formItem = [
   { label: '书名', value: 'name', type: 'text' },
   { label: '作者', value: 'author', type: 'text' },
-  { label: '作者', value: 'daterange', type: 'daterange' },
   {
     label: '类型', value: 'type', type: 'select',
     children: [
@@ -34,14 +34,6 @@ const formItem = [
 const formData = reactive({ name: '', author: '', type: '', daterange: '' })
 
 const tableColumn = [
-  // {
-  //   prop: 'id',
-  //   label: 'ID',
-  //   // width: '120',
-  //   sortable: false,
-  //   fixed: false,
-  //   showOverflowTooltip: false
-  // },
   {
     prop: 'name',
     label: '名字',
@@ -75,6 +67,7 @@ const getList = val => {
 
 const onAddClick = () => {
   console.log('新增数据')
+  goodsAddRef.value.show()
 }
 
 </script>

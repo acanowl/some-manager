@@ -1,12 +1,14 @@
 <template lang="pug">
 el-dialog(:title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="closeHandle")
-  the-form(:formItem="formItem" :formData="formData" :rules="rules")
+  the-form(:formItem="formItem" v-model:formData="state.form" :rules="rules" :spanCol="spanCol")
   template(#footer)
     el-button(@click="visible = false") 取 消
     el-button(v-if="mode != 'show'" type="primary" @click="submit()") 保 存
 </template>
 
 <script setup>
+import { clone } from '@/utils/tool'
+
 const dialogForm = ref(null)
 
 const emits = defineEmits(['submit', 'closed'])
@@ -17,15 +19,20 @@ const props = defineProps({
   // 表单数据
   formData: { type: Object, default: () => {} },
   // 校验规则
-  rules: Object,
+  rules: { type: Object, default: () => { } },
+  spanCol: { type: Number, default: 20 },
 })
 
+const state = reactive({ form: {} })
+state.form = clone(props.formData)
+
 const titleMap = { add: '新增', edit: '编辑', show: '查看' }
+
 let mode = ref('add')
 let visible = ref(false)
 
-const show = (mode = 'add') => {
-  mode.value = mode
+const show = (status = 'add') => {
+  mode.value = status
   visible.value = true
 }
 
@@ -38,7 +45,7 @@ const submit = () => {
   })
 }
 //表单注入数据
-const setData = data => Object.assign(props.formData, data)
+const setData = data => Object.assign(state.form, data)
 
 defineExpose({ show, setData, submit })
 </script>

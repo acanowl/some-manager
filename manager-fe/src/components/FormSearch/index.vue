@@ -1,6 +1,6 @@
 <template lang="pug">
 .flex.justify-between
-  the-form.flex-1.pr-20px(:formItem="filterFormItem" :formData="state.form" :noPd="true" @change="changeHandle")
+  the-form.flex-1.pr-20px(:formItem="filterFormItem" v-model:formData="state.form" :noPd="true")
   .flex-shrink-0
     el-button(type="primary" @click="searchForm") 查询
     el-button(@click="clearData") 重置
@@ -27,11 +27,6 @@ const filterFormItem = formItem.filter(item => formTypeLimit.includes(item.type)
 const emits = defineEmits(['searchForm', 'clearForm'])
 
 const searchForm = () => emits('searchForm', state.form)
-
-// FIXME 修改为v-model:formData的形式
-const changeHandle = (data, val) => {
-  state.form = clone(data)
-}
 
 // 清空搜索栏
 const clearData = () => {
