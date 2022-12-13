@@ -1,7 +1,8 @@
 <template lang="pug">
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
-  form-search(:form-item="formItem" :form-data="formData" @searchForm="getList")
+  form-search(:formItem="formItem" :formData="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
+  the-form(:formItem="formItem" :formData="formData" :noPd="true")
   the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
 </template>
 
@@ -15,6 +16,7 @@ const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 const formItem = [
   { label: '书名', value: 'name', type: 'text' },
   { label: '作者', value: 'author', type: 'text' },
+  { label: '作者', value: 'daterange', type: 'daterange' },
   {
     label: '类型', value: 'type', type: 'select',
     children: [
@@ -29,7 +31,7 @@ const formItem = [
     ]
   }
 ]
-const formData = reactive({ name: '', author: '', type: '' })
+const formData = reactive({ name: '', author: '', type: '', daterange: '' })
 
 const tableColumn = [
   // {
