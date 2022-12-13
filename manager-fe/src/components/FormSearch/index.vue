@@ -1,6 +1,6 @@
 <template lang="pug">
 .flex.justify-between
-  the-form.flex-1.pr-20px(:formItem="filterFormItem" v-model:formData="state.form" :noPd="true")
+  the-form.flex-1.pr-20px(ref="formSeachRef" :formItem="filterFormItem" v-model:formData="state.form" :noPd="true")
   .flex-shrink-0
     el-button(type="primary" @click="searchForm") 查询
     el-button(@click="clearData") 重置
@@ -9,6 +9,8 @@
 
 <script setup>
 import { clone } from '@/utils/tool'
+
+const formSeachRef = ref(null)
 
 const { formItem, formData } = defineProps({
   // 表单
@@ -22,7 +24,7 @@ state.form = clone(formData)
 
 // 目前仅提供下拉 文本及日期筛选
 const formTypeLimit = ['select', 'text', 'daterange']
-const filterFormItem = formItem.filter(item => formTypeLimit.includes(item.type))
+const filterFormItem = computed(() => formItem.filter(item => formTypeLimit.includes(item.type)))
 
 const emits = defineEmits(['searchForm', 'clearForm'])
 
@@ -30,7 +32,7 @@ const searchForm = () => emits('searchForm', state.form)
 
 // 清空搜索栏
 const clearData = () => {
-  Object.keys(state.form).forEach(key => (state.form[key] = ''))
+  formSeachRef.value.resetFields()
   emits('clearForm')
 }
 </script>

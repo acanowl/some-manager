@@ -1,26 +1,35 @@
 <template lang="pug">
 el-dialog(:title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="closeHandle")
-  the-form(:formItem="formItem" v-model:formData="state.form" :rules="rules" :spanCol="spanCol")
+  the-form(
+    ref="formOperationRef" 
+    v-model:formData="state.form"
+    :formItem="formItem"
+    :labelWidth="labelWidth"
+    :disabled="mode === 'show'"
+    :rules="rules"
+    :colSpan="colSpan")
   template(#footer)
-    el-button(@click="visible = false") 取 消
-    el-button(v-if="mode != 'show'" type="primary" @click="submit()") 保 存
+    el-button(@click="cancel") 取 消
+    el-button(v-if="mode !== 'show'" type="primary" @click="submit()") 保 存
 </template>
 
 <script setup>
 import { clone } from '@/utils/tool'
 
-const dialogForm = ref(null)
+const formOperationRef = ref(null)
 
-const emits = defineEmits(['submit', 'closed'])
+const emits = defineEmits(['submitForm', 'closed'])
 
 const props = defineProps({
+  type: { type: String, default: 'add' },
   // 表单
   formItem: { type: Array, default: () => [] },
   // 表单数据
-  formData: { type: Object, default: () => {} },
+  formData: { type: Object, default: () => { } },
   // 校验规则
   rules: { type: Object, default: () => { } },
-  spanCol: { type: Number, default: 20 },
+  colSpan: { type: Number, default: 24 },
+  labelWidth: { type: String, default: '100px' },
 })
 
 const state = reactive({ form: {} })
@@ -28,26 +37,44 @@ state.form = clone(props.formData)
 
 const titleMap = { add: '新增', edit: '编辑', show: '查看' }
 
-let mode = ref('add')
+let mode = ref(props.type)
 let visible = ref(false)
 
+// 设置弹窗隐藏显示
+const setVisible = (value = false) => visible.value = value
+
+// 展示不同类型弹窗
 const show = (status = 'add') => {
   mode.value = status
-  visible.value = true
+  setVisible(true)
+  return exposes
 }
 
-const closeHandle = () => emits('closed')
-
-//表单提交方法
+// 表单取消方法
+const cancel = () => {
+  formOperationRef.value.resetFields()
+  setVisible()
+}
+// 表单提交方法
 const submit = () => {
-  dialogForm.value.validate(async (valid) => {
-    valid && emits('submit', () => visible.value = false)
-  })
+  const { valid, data } = formOperationRef.value.submitForm()
+  if (valid) {
+    emits('submitForm', data)
+    cancel()
+  }
 }
-//表单注入数据
+// 点击右上角关闭弹窗
+const closeHandle = () => {
+  cancel()
+  emits('closed')
+}
+
+// 表单注入数据
 const setData = data => Object.assign(state.form, data)
 
-defineExpose({ show, setData, submit })
+// 实现链式调用
+const exposes = { show, setData, submit }
+defineExpose(exposes)
 </script>
 
 <script>

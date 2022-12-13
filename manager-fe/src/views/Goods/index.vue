@@ -3,7 +3,7 @@ el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="formItem" :formData="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
   the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
-form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData")
+form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
@@ -37,7 +37,6 @@ const tableColumn = [
   {
     prop: 'name',
     label: '名字',
-    // width: '120',
     sortable: false,
     fixed: false,
     showOverflowTooltip: false
@@ -45,7 +44,6 @@ const tableColumn = [
   {
     prop: 'date',
     label: '时间',
-    // width: '120',
     sortable: false,
     fixed: false,
     showOverflowTooltip: false
@@ -53,7 +51,6 @@ const tableColumn = [
   {
     prop: 'price',
     label: '价格',
-    // width: '120',
     sortable: false,
     fixed: false,
     showOverflowTooltip: false
@@ -67,7 +64,11 @@ const getList = val => {
 
 const onAddClick = () => {
   console.log('新增数据')
-  goodsAddRef.value.show()
+  goodsAddRef.value.show('add')
+}
+
+const submitHandle = data => {
+  console.log(data, 'xx')
 }
 
 </script>

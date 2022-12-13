@@ -37,7 +37,7 @@ el-form.form(ref="commonFormRef" v-if="formItem && formItem.length > 0" :rules="
 <script setup>
 import { Plus } from '@element-plus/icons-vue'
 const { proxy } = getCurrentInstance()
-const emits = defineEmits(['update:formData', 'change', 'oninput', 'submitForm', 'uploadFile'])
+const emits = defineEmits(['update:formData', 'change', 'oninput', 'uploadFile'])
 const props = defineProps({
   // 表单
   formItem: { type: Array, default: () => [] },
@@ -63,17 +63,16 @@ const cptColSpan = computed(() => {
 })
 
 // 双向绑定
-watch(() => props.formData, val => (state.form = val), { deep: true })
+watch(() => props.formData, val => (state.form = val), { deep: true, immediate: true })
 watch(() => state.form, val => emits('update:formData', val), { deep: true })
 
 const submitForm = () => {
   if (props.rules) {
     return commonFormRef.value.validate((valid) => {
-      if (!valid) return false
-      emits('submitForm', state.form, valid)
+      return { valid, data: valid ? state.form : null }
     })
   } else {
-    emits('submitForm', state.form)
+    return { valid: true, data: state.form }
   }
 }
 
