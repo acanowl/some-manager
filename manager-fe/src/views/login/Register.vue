@@ -33,7 +33,7 @@ const register = async formEl => {
       console.log(res, 'success register')
       const { msg: message = '', code } = res || {}
       // FIXME 暂时处理
-      ElMessage({ message, type: code === -1 ? 'error' : 'success' })
+      ElNotification({ message, type: code === -1 ? 'error' : 'success' })
     } catch (error) {
       console.log('error submit!', error)
     }

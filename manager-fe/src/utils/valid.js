@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus'
 
 /**
  * 统一处理表单验证
@@ -16,7 +16,7 @@ export const formValidate = async (instance, autoShowMessage = true) => {
       const errorList = Object.values(error)
       errorList.forEach(items => {
         const { message = '' } = items[0] || {}
-        message && ElMessage.error(message)
+        message && ElNotification.error(message)
       })
     }
     return false
