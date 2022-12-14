@@ -15,8 +15,6 @@ router.post('/add', async ctx => {
   //   ctx.body = { code: -1, msg: '字段不能为空', data: null }
   //   return
   // }
-  console.log(name, author, date, classfiy, price, ' ?')
-
   const data = await setSchema(Goods, { name, author, date, classfiy, price })
 
   ctx.body = { code: 0, msg: '新增成功', data }
@@ -30,9 +28,45 @@ router.post('/update', async ctx => {
 })
 
 router.get('/list', async ctx => {
-  // TODO 后续新增page, pageSize分页功能
-  const list = await Goods.find()
-  ctx.body = { code: 0, msg: 'success', data: list }
+  let { page = 1, pageSize = 10, name, author, classfiy } = ctx.query
+
+  page = Number(page)
+  pageSize = Number(pageSize)
+
+  const params = {}
+  name && Object.assign(params, { name })
+  author && Object.assign(params, { author })
+  classfiy && Object.assign(params, { classfiy })
+
+  const list = await Goods.find(params)
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+
+  const total = await Goods.countDocuments()
+  ctx.body = {
+    code: 0,
+    msg: 'success',
+    data: {
+      rows: list,
+      total,
+      page,
+      pageSize
+    }
+  }
+})
+
+router.post('/delete', async ctx => {
+  const { id } = getBody(ctx)
+  try {
+    const { deletedCount } = await Goods.deleteOne({ _id: id })
+    if (deletedCount) {
+      ctx.body = { code: 0, msg: '删除成功' }
+    } else {
+      ctx.body = { code: -1, msg: '删除失败！数据不存在，请联系管理员！' }
+    }
+  } catch (error) {
+    ctx.body = { code: -1, msg: '删除失败！数据不存在，请联系管理员！' }
+  }
 })
 
 module.exports = router
