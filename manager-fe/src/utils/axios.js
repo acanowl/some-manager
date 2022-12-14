@@ -31,7 +31,7 @@ axios.interceptors.response.use(
 export const get = (url, params = {}) =>
   new Promise((resolve, reject) =>
     axios
-      .get(url, params)
+      .get(url, { params })
       .then(response => resolve(response.data))
       .catch(reject)
   )

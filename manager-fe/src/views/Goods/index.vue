@@ -2,14 +2,15 @@
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="formItem" :formData="formData" @searchForm="getList")
     el-button(type="primary" @click="onAddClick") 新增
-  the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" hidePagination :innerPadding="cptInnerPadding")
+  the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
+    template(#operation="{ row }")
+      el-link(type="primary" @click="deleteHandle(row)") 删除
 form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
 // , goodsUpdateApi // 编辑
-import { goodsListApi, goodsAddApi } from '@/api'
-import { useDateFormat } from '@vueuse/shared'
+import { goodsListApi, goodsAddApi, goodsDeleteApi } from '@/api'
 
 const goodsTableRef = ref(null)
 const goodsAddRef = ref(null)
@@ -50,37 +51,30 @@ const tableColumn = [
   {
     prop: 'author',
     label: '作者',
-    sortable: false,
-    fixed: false,
     showOverflowTooltip: true
   },
   {
     prop: 'date',
-    label: '出版日期',
-    sortable: false,
-    fixed: false,
-    showOverflowTooltip: false
+    label: '出版日期'
   },
   {
     prop: 'classfiy',
     label: '类型',
-    sortable: false,
-    fixed: false,
-    showOverflowTooltip: false,
     format: val => classfiyMap.filter(item => item.value == val)[0]?.label
   },
   {
     prop: 'price',
-    label: '价格',
-    sortable: false,
-    fixed: false,
-    showOverflowTooltip: false
+    label: '价格'
   },
+  {
+    prop: 'operation',
+    label: '操作'
+  }
 ]
 
 const getList = val => {
   console.log('查询数据', val)
-  goodsTableRef.value.refresh()
+  goodsTableRef.value.reload(val)
 }
 
 const onAddClick = () => {
@@ -91,10 +85,24 @@ const submitHandle = async data => {
     const res = await goodsAddApi(data)
     const { msg: message = '', code } = res || {}
     const isSuccess = code !== -1
-    ElMessage({ message, type: isSuccess ? 'success' : 'error' })
+    ElNotification({ message, type: isSuccess ? 'success' : 'error' })
     isSuccess && goodsTableRef.value.refresh()
   } catch (error) {
-    console.log('error submit!', error)
+    console.log('error add!', error)
+  }
+}
+
+const deleteHandle = async row => {
+  const { _id: id, name } = row
+  try {
+    await ElMessageBox.confirm(`是否要删除 《${name}》 ?`, '温馨提示', { confirmButtonText: 'OK', center: true, cancelButtonText: 'Cancel' })
+    const res = await goodsDeleteApi({ id })
+    const { msg: message = '', code } = res || {}
+    const isSuccess = code !== -1
+    ElNotification({ message, type: isSuccess ? 'success' : 'error' })
+    isSuccess && goodsTableRef.value.refresh()
+  } catch (error) {
+    console.log('error delete!', error)
   }
 }
 

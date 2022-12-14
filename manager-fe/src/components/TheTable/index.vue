@@ -64,7 +64,7 @@ const sortChange = obj => {
  */
 let total = ref(0)
 let currentPage = ref(1)
-let currentPageSize = toRef(props.pageSize)
+let currentPageSize = ref(props.pageSize)
 // 分页点击
 const paginationChange = () => getData()
 // 条数变化
