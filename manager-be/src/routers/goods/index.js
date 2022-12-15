@@ -1,6 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
-const { getBody, getOne, setSchema } = require('../../utils')
+const { getBody, getOne, setSchema, saveSchema } = require('../../utils')
 
 const Goods = mongoose.model('Goods')
 
@@ -8,23 +8,58 @@ const router = new Router({
   prefix: '/goods'
 })
 
+const UPDATE_COUNT_TYPE = { IN: 1, OUT: 0 }
+
+const getParams = params => {
+  const { name, author, date, classfiy, price, count } = params
+  return { name, author, date, classfiy, price, count }
+}
+
 router.post('/add', async ctx => {
-  const { name, author, date, classfiy, price } = getBody(ctx)
+  const params = getBody(ctx)
   // TODO 字段判断
   // if (!account || !password) {
   //   ctx.body = { code: -1, msg: '字段不能为空', data: null }
   //   return
   // }
-  const data = await setSchema(Goods, { name, author, date, classfiy, price })
-
+  const data = await setSchema(Goods, getParams(params))
   ctx.body = { code: 0, msg: '新增成功', data }
 })
 
 router.post('/update', async ctx => {
-  const { name, author, date, classfiy, price } = getBody(ctx)
-  const data = await setSchema(Goods, { name, author, date, classfiy, price })
+  const params = getBody(ctx)
+  const data = await setSchema(Goods, getParams(params))
 
   ctx.body = { code: 0, msg: '更新成功', data }
+})
+
+router.post('/updateCount', async ctx => {
+  const params = getBody(ctx)
+  let { id, num, type } = params
+
+  let isExist = await getOne(Goods, { _id: id })
+
+  if (isExist) {
+    num = Number(num)
+    const isAddCount = type === UPDATE_COUNT_TYPE.IN
+    if (isAddCount) {
+      num = Math.abs(num)
+    } else {
+      num = -Math.abs(num)
+    }
+    isExist.count = isExist.count + num
+
+    if (isExist.count < 0) {
+      ctx.body = { code: -1, msg: '库存不足，请重新输入' }
+      return
+    }
+
+    const data = await saveSchema(isExist, getParams(params))
+    const msg = `成功${isAddCount ? '添加' : '减少'} ${Math.abs(num)} 份库存`
+    ctx.body = { code: 0, msg, data }
+  } else {
+    ctx.body = { code: -1, msg: '更新失败！数据不存在，请联系管理员！' }
+  }
 })
 
 router.get('/list', async ctx => {
@@ -57,14 +92,11 @@ router.get('/list', async ctx => {
 
 router.post('/delete', async ctx => {
   const { id } = getBody(ctx)
-  try {
-    const { deletedCount } = await Goods.deleteOne({ _id: id })
-    if (deletedCount) {
-      ctx.body = { code: 0, msg: '删除成功' }
-    } else {
-      ctx.body = { code: -1, msg: '删除失败！数据不存在，请联系管理员！' }
-    }
-  } catch (error) {
+  const isExist = await getOne(Goods, { _id: id })
+  if (isExist) {
+    await Goods.deleteOne({ _id: id })
+    ctx.body = { code: 0, msg: '删除成功' }
+  } else {
     ctx.body = { code: -1, msg: '删除失败！数据不存在，请联系管理员！' }
   }
 })

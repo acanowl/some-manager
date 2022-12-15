@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 /**
  * 获取body
  * @param {*} ctx 上下文
@@ -14,6 +15,11 @@ const getBody = ctx => ctx.request.body || {}
 const setSchema = async (Schema, options = {}) => {
   if (!Schema) return {}
   const schema = new Schema(options)
+  return await saveSchema(schema, options)
+}
+
+const saveSchema = async (schema, options = {}) => {
+  if (!schema) return {}
   const data = await schema.save()
   return Object.keys(options).reduce(
     (obj, key) => ({ ...obj, [key]: data[key] }),
@@ -27,11 +33,18 @@ const setSchema = async (Schema, options = {}) => {
  * @param {*} options
  * @returns
  */
-const getOne = async (Schema, options) =>
-  Schema ? await Schema.findOne(options).exec() : null
+const getOne = async (Schema, options) => {
+  const { _id: id } = options
+  // 如果入参有_id，则判断是否有效
+  if (!Schema || (id && !mongoose.Types.ObjectId.isValid(id))) {
+    return false
+  }
+  return await Schema.findOne(options)
+}
 
 module.exports = {
   getBody,
+  saveSchema,
   setSchema,
   getOne
 }
