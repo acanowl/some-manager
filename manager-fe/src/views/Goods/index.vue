@@ -9,14 +9,18 @@ el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
         .px-10px {{ row.count }}
         el-link(type="primary" @click="countChangeHandle(UPDATE_COUNT_TYPE.OUT, row)") 出库
     template(#operation="{ row }")
-      el-link(type="primary" @click="deleteHandle(row)") 删除
+      .flex
+        .pr-10px
+          el-link(type="primary" @click="showDetialHandle(row)") 查看
+        .pr-10px
+          el-link(type="primary" @click="updateHandle(row)") 修改
+        el-link(type="primary" @click="deleteHandle(row)") 删除
 form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
-// , goodsUpdateApi // 编辑
 import { resultFn } from '@/utils/tool'
-import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateCountApi } from '@/api'
+import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsUpdateCountApi } from '@/api'
 
 const goodsTableRef = ref(null)
 const goodsAddRef = ref(null)
@@ -24,6 +28,7 @@ const goodsAddRef = ref(null)
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 
 const UPDATE_COUNT_TYPE = { IN: 1, OUT: 0 }
+const OPERATION_FORM_TYPE = { ADD: 'add', EDIT: 'edit' }
 
 const classfiyMap = [
   { label: '小说', value: '0' },
@@ -96,9 +101,15 @@ const getList = val => {
 const onAddClick = () => {
   goodsAddRef.value.show('add')
 }
-const submitHandle = async data => {
+const submitHandle = async (data, type) => {
+  const httpRequestApi = {
+    [OPERATION_FORM_TYPE.ADD]: goodsAddApi,
+    [OPERATION_FORM_TYPE.EDIT]: goodsUpdateApi
+  }[type]
+
+  if (!httpRequestApi) return
   try {
-    const res = await goodsAddApi(data)
+    const res = await httpRequestApi(data)
     const { isSuccess } = resultFn(res)
     isSuccess && goodsTableRef.value.refresh()
   } catch (error) {
@@ -109,7 +120,6 @@ const submitHandle = async data => {
 
 const countChangeHandle = async (type, row) => {
   const { _id: id } = row
-  // goodsUpdateCountApi
   const title = `请输入需要${type === UPDATE_COUNT_TYPE.IN ? '增加' : '减少'}库存数`
   try {
     const { value } = await ElMessageBox.prompt('', title, {
@@ -126,6 +136,14 @@ const countChangeHandle = async (type, row) => {
     console.log('error count change!', error)
   }
 }
+
+const showDetialHandle = async row => {
+  goodsAddRef.value.show('show').setData(row)
+}
+const updateHandle = async row => {
+  goodsAddRef.value.show('edit').setData(row)
+}
+
 const deleteHandle = async row => {
   const { _id: id, name } = row
   try {

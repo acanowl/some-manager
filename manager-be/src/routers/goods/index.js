@@ -15,6 +15,15 @@ const getParams = params => {
   return { name, author, date, classfiy, price, count }
 }
 
+const setValue = (origin, params) => {
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      origin[key] = value
+    }
+  })
+  return origin
+}
+
 router.post('/add', async ctx => {
   const params = getBody(ctx)
   // TODO 字段判断
@@ -28,9 +37,16 @@ router.post('/add', async ctx => {
 
 router.post('/update', async ctx => {
   const params = getBody(ctx)
-  const data = await setSchema(Goods, getParams(params))
+  let { _id } = params
+  let isExist = await getOne(Goods, { _id })
 
-  ctx.body = { code: 0, msg: '更新成功', data }
+  if (isExist) {
+    isExist = setValue(isExist, params)
+    const data = await saveSchema(isExist, getParams(params))
+    ctx.body = { code: 0, msg: '更新成功', data }
+  } else {
+    ctx.body = { code: -1, msg: '更新失败！数据不存在，请联系管理员！' }
+  }
 })
 
 router.post('/updateCount', async ctx => {

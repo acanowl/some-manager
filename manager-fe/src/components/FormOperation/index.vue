@@ -59,7 +59,7 @@ const cancel = () => {
 const submit = () => {
   const { valid, data } = formOperationRef.value.submitForm()
   if (valid) {
-    emits('submitForm', data)
+    emits('submitForm', data, mode.value)
     cancel()
   }
 }
