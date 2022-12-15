@@ -1,3 +1,11 @@
+// 统一返回处理
+export const resultFn = res => {
+  const { msg: message = '', code } = res || {}
+  const isSuccess = code !== -1
+  ElNotification({ message, type: isSuccess ? 'success' : 'error' })
+  return { isSuccess }
+}
+
 /* 处理权限 */
 export const hasPermission = (route, role) => {
   if (route.meta && route.meta.roles) {
