@@ -1,7 +1,7 @@
 <template lang="pug">
 .layout-topbar.flex.justify-between.items-center.h-50px.bg-white
   el-breadcrumb.px-20px(:separator-icon="ArrowRight")
-    el-breadcrumb-item(v-for="item in breadcrumbData" :key="item.title" :to="{ path: item.path }") {{ item.title }}
+    el-breadcrumb-item(v-for="item in breadcrumbData" :key="item.title" v-bind="cptBreadcrumbItemBind(item)") {{ item.title }}
 </template>
   
 <script setup>
@@ -9,6 +9,15 @@ import { ArrowRight } from '@element-plus/icons-vue'
 import { useAppStore } from '@/store/modules/app'
 const userStore = useAppStore()
 const breadcrumbData = computed(() => userStore.getBreadCrumb)
+const router = useRouter()
+const cptBreadcrumbItemBind = computed(() => {
+  return item => {
+    if (router.currentRoute.value.path === item.path) {
+      return {}
+    }
+    return { to: { path: item.path } }
+  }
+})
 </script>
 
 <script>

@@ -1,10 +1,10 @@
 <template lang="pug">
 .the-table(v-loading="isLoading" :style="cptHeight")
-  el-table(:data="tableData" :row-key="rowKey" :key="toggleIndex" ref="theTableRef" height="100%" :border="config.border" :stripe="config.stripe" @sort-change="sortChange")
+  el-table(:data="customFormat(tableData)" :row-key="rowKey" :key="toggleIndex" ref="theTableRef" height="100%" :border="config.border" :stripe="config.stripe" @sort-change="sortChange")
     slot
     el-table-column(v-for="(item, index) in column" :key="index" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :show-overflow-tooltip="item.showOverflowTooltip")
       template(#default="scope")
-        slot(:name="item.prop" v-bind="scope") {{ item.format ? item.format(scope.row[item.prop]) :  scope.row[item.prop] }}
+        slot(:name="item.prop" v-bind="scope") {{ item.format ? item.format(getPropData(scope.row, item.prop)) :  getPropData(scope.row, item.prop) }}
     el-table-column(min-width="1")
     template(#empty)
       el-empty(:description="emptyText" :image-size="100")
@@ -31,6 +31,7 @@ const props = defineProps({
   hidePagination: { type: Boolean, default: false },
   paginationLayout: { type: String, default: defaultConfig.paginationLayout },
   innerPadding: { type: [String, Number], default: '0' },
+  customFormat: { type: Function, default: val => val }
 })
 
 const emits = defineEmits(['dataChange'])
@@ -59,6 +60,20 @@ const sortChange = obj => {
   getData()
 }
 
+// 
+const getPropData = (data = {}, prop = '') => {
+  const dpPropData = (data = {}, prop = '') => {
+    const len = prop.indexOf('.')
+    if (len !== -1) {
+      const firstProp = prop.slice(0, len)
+      const lastProps = prop.slice(len + 1)
+      return dpPropData(data[firstProp], lastProps)
+    }
+    return data[prop]
+  }
+  return dpPropData(data, prop)
+}
+
 /**
  * 页码相关
  */
@@ -78,7 +93,7 @@ let isLoading = ref(false)
 let emptyText = ref('暂无数据')
 // 列表数据 & 接口请求参数
 let tableData = ref([])
-let tableParams = toRef(props.params)
+let tableParams = ref(props.params)
 
 // 刷新数据
 const refresh = () => {
@@ -116,7 +131,6 @@ const getData = async () => {
       })
     }
     Object.assign(reqData, tableParams.value)
-
     try {
       const res = await props.requestApi(reqData)
       const response = parseData(res)
