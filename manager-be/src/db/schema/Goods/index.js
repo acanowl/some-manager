@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { getMeta } = require('../../config')
+const { getMeta, preSave } = require('../../config')
 
 const GoodsSchema = new mongoose.Schema({
   name: String, // 名称
@@ -11,5 +11,7 @@ const GoodsSchema = new mongoose.Schema({
 
   meta: getMeta()
 })
+
+GoodsSchema.pre('save', preSave)
 
 module.exports = GoodsSchema

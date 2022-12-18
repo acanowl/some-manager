@@ -13,7 +13,17 @@ const getMeta = () => ({
   }
 })
 
+function preSave(next) {
+  const now = Date.now()
+  if (this.isNew) {
+    this['meta'].createdAt = now
+  }
+  this['meta'].updatedAt = now
+  next()
+}
+
 module.exports = {
   mongodbPath,
-  getMeta
+  getMeta,
+  preSave
 }
