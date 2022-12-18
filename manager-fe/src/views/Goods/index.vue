@@ -11,19 +11,21 @@ el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
     template(#operation="{ row }")
       .flex
         .pr-10px
-          el-link(type="primary" @click="showDetialHandle(row)") 查看
+          el-link(@click="showDetialHandle(row)") 查看
         .pr-10px
-          el-link(type="primary" @click="updateHandle(row)") 修改
-        el-link(type="primary" @click="deleteHandle(row)") 删除
-form-operation(ref="goodsAddRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
+          el-link(type="primary" @click="updateHandle(row)") 编辑
+        el-link(type="danger" @click="deleteHandle(row)") 删除
+form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
 import { resultFn } from '@/utils/tool'
 import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsUpdateCountApi } from '@/api'
 
+const router = useRouter()
+
 const goodsTableRef = ref(null)
-const goodsAddRef = ref(null)
+const goodsSaveRef = ref(null)
 
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 
@@ -99,7 +101,7 @@ const getList = val => {
 }
 
 const onAddClick = () => {
-  goodsAddRef.value.show('add')
+  goodsSaveRef.value.show(OPERATION_FORM_TYPE.ADD)
 }
 const submitHandle = async (data, type) => {
   const httpRequestApi = {
@@ -138,10 +140,11 @@ const countChangeHandle = async (type, row) => {
 }
 
 const showDetialHandle = async row => {
-  goodsAddRef.value.show('show').setData(row)
+  // goodsSaveRef.value.show('show').setData(row)
+  router.push({ path: '/goods/detail', query: { id: row._id } })
 }
 const updateHandle = async row => {
-  goodsAddRef.value.show('edit').setData(row)
+  goodsSaveRef.value.show(OPERATION_FORM_TYPE.EDIT).setData(row)
 }
 
 const deleteHandle = async row => {
@@ -157,6 +160,10 @@ const deleteHandle = async row => {
   }
 }
 
+</script>
+
+<script>
+export default { name: 'goods' }
 </script>
 
 <style lang="scss">

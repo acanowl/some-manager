@@ -9,7 +9,13 @@ const layoutMap = [
     path: 'goods',
     name: 'Goods',
     component: () => import('@/views/Goods/index.vue'),
-    meta: { title: '商品', icon: 'HomeFilled' }
+    meta: { title: '商品', icon: 'HomeFilled' },
+  },
+  {
+    path: 'goods/detail',
+    name: 'GoodsDetail',
+    component: () => import('@/views/GoodsDetail/index.vue'),
+    meta: { title: '商品详情', icon: 'HomeFilled' }
   }
 ]
 
