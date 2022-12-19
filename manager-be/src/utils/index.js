@@ -21,10 +21,11 @@ const setSchema = async (Schema, options = {}) => {
 const saveSchema = async (schema, options = {}) => {
   if (!schema) return {}
   const data = await schema.save()
-  return Object.keys(options).reduce(
-    (obj, key) => ({ ...obj, [key]: data[key] }),
-    {}
-  )
+  let arr = Object.keys(options)
+  if (Array.isArray(options)) {
+    arr = options
+  }
+  return arr.reduce((obj, key) => ({ ...obj, [key]: data[key] }), {})
 }
 
 /**
