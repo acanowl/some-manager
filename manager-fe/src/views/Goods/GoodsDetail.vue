@@ -24,7 +24,7 @@ el-card.mt-10px.flex-1.flex-col(shadow="never" :body-style="{ flex: 1 }")
         el-link(type="primary" @click="updateLogHandle(UPDATE_COUNT_TYPE.OUT)") 
           i-ep-check(v-if="!cptIsIn")
           .pl-4px 出库日志
-  the-table(ref="inventoryLogTableRef" :requestApi="goodsInventoryLogApi" :column="inventoryLogTableColumn" :customFormat="formatLogData")
+  the-table(ref="inventoryLogTableRef" :requestApi="goodsInventoryLogApi" :column="inventoryLogTableColumn" :innerPadding="cptInnerPadding")
 form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
   
@@ -40,6 +40,8 @@ const OPERATION_FORM_TYPE = { ADD: 'add', EDIT: 'edit' }
 
 const goodsSaveRef = ref(null)
 const inventoryLogTableRef = ref(null)
+
+const cptInnerPadding = computed(() => 'var(--el-card-padding)')
 
 const curId = ref('')
 const row = ref({})
@@ -79,9 +81,7 @@ const inventoryLogTableColumn = [
   {
     prop: 'meta.createdAt',
     label: '时间',
-    format: val => {
-      return useDateFormat(val, 'YYYY-MM-DD HH:mm:ss').value
-    }
+    format: val => useDateFormat(val, 'YYYY-MM-DD HH:mm:ss').value
   }
 ]
 
@@ -148,10 +148,8 @@ const deleteHandle = async row => {
 }
 
 const updateLogHandle = type => {
+  // TODO 移除customFormat方法，不合理，应由后台返回相关数据
   logType.value = `${type}`
-}
-const formatLogData = data => {
-  return data?.filter(item => item.type === logType.value)
 }
 
 onMounted(() => {
@@ -159,8 +157,4 @@ onMounted(() => {
   curId.value = id
   getData()
 })
-</script>
-
-<script>
-export default { name: 'goods-detail' }
 </script>

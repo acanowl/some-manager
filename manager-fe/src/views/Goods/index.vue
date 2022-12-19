@@ -165,7 +165,3 @@ const deleteHandle = async row => {
 <script>
 export default { name: 'goods' }
 </script>
-
-<style lang="scss">
-
-</style>
