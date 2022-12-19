@@ -115,7 +115,7 @@ router.get('/list', async ctx => {
     .skip((page - 1) * pageSize)
     .limit(pageSize)
 
-  const total = await Goods.countDocuments()
+  const total = list.length
   ctx.body = {
     code: 0,
     msg: 'success',
