@@ -1,6 +1,6 @@
 <template lang="pug">
 .flex.justify-between
-  the-form.flex-1.pr-20px(ref="formSeachRef" :formItem="filterFormItem" v-model:formData="state.form" :noPd="true")
+  the-form.flex-1.pr-20px(ref="formSeachRef" :formItem="filterFormItem" v-model:formData="state.form" :colSpan="colSpan" :labelWidth="labelWidth" :noPd="true")
   .flex-shrink-0
     el-button(type="primary" @click="searchForm") 查询
     el-button(@click="clearData") 重置
@@ -16,7 +16,9 @@ const { formItem, formData } = defineProps({
   // 表单
   formItem: { type: Array, default: () => [] },
   // 表单数据
-  formData: { type: Object, default: () => { } }
+  formData: { type: Object, default: () => { } },
+  colSpan: { type: Number, default: 0 },
+  labelWidth: { type: String, default: 'auto' }
 })
 
 const state = reactive({ form: {} })

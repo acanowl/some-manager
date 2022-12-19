@@ -54,6 +54,7 @@ const show = (status = 'add') => {
 const cancel = () => {
   formOperationRef.value.resetFields()
   setVisible()
+  emits('closed')
 }
 // 表单提交方法
 const submit = () => {
@@ -66,7 +67,6 @@ const submit = () => {
 // 点击右上角关闭弹窗
 const closeHandle = () => {
   cancel()
-  emits('closed')
 }
 
 // 表单注入数据
