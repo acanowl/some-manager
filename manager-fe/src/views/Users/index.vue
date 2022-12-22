@@ -19,6 +19,7 @@ form-operation(ref="userSaveRef" :formItem="formItem" :formData="formData" @subm
 import { useDateFormat } from '@vueuse/core'
 import { resultFn } from '@/utils/tool'
 import { userAddApi, userUpdateApi, userListApi, userDeleteApi, userResetPasswordApi } from '@/api'
+import { useCharacterStore } from '@/store/modules/character'
 
 const userTableRef = ref(null)
 const userSaveRef = ref(null)
@@ -26,6 +27,11 @@ const userSaveRef = ref(null)
 const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 
 const OPERATION_FORM_TYPE = { ADD: 'add', EDIT: 'edit', SHOW: 'show' }
+
+const characterStore = useCharacterStore()
+
+// 角色表单列表
+const formCharacterList = characterStore.characterList.map(item => ({ label: item.name, value: item.prop }))
 
 let isAdd = ref(false)
 
@@ -36,10 +42,10 @@ const fromSearchItem = [
 const formItem = computed(() => [
   { label: '账号', prop: 'account', type: 'text' },
   ...(isAdd.value ? [{ label: '密码', prop: 'password', type: 'text' }] : []),
-  { label: '角色', prop: 'roles', type: 'select', children: [] },
+  { label: '角色', prop: 'character', type: 'select', children: formCharacterList },
 ])
 
-const formData = reactive({ account: '', password: '', roles: '' })
+const formData = reactive({ account: '', password: '', character: '' })
 
 const tableColumn = [
   {
@@ -50,9 +56,9 @@ const tableColumn = [
     showOverflowTooltip: true
   },
   {
-    prop: 'roles',
+    prop: 'character',
     label: '角色',
-    format: val => val
+    format: val => formCharacterList.find(item => item.value === val).label
   },
   {
     prop: 'meta.createdAt',

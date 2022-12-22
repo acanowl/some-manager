@@ -1,5 +1,8 @@
 {
   "vueCompilerOptions": {
     "plugins": ["@volar/vue-language-plugin-pug"]
+  },
+  "compilerOptions": {
+    "lib": ["ES2015"]
   }
 }

@@ -54,6 +54,7 @@ const show = (status = 'add') => {
 const cancel = () => {
   formOperationRef.value.resetFields()
   setVisible()
+  resetData()
   emits('closed')
 }
 // 表单提交方法
@@ -71,9 +72,10 @@ const closeHandle = () => {
 
 // 表单注入数据
 const setData = data => Object.assign(state.form, data)
+const resetData = () => state.form = {}
 
 // 实现链式调用
-const exposes = { show, setData, submit }
+const exposes = { show, setData, resetData, submit }
 defineExpose(exposes)
 </script>
 

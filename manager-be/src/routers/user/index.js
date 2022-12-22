@@ -4,6 +4,7 @@ const { getBody, getOne, setSchema, saveSchema } = require('../../utils')
 const config = require('../../project.config')
 
 const User = mongoose.model('User')
+const Character = mongoose.model('Character')
 
 const router = new Router({
   prefix: '/user'
@@ -19,13 +20,23 @@ const setValue = (origin, params) => {
 }
 
 router.post('/add', async ctx => {
-  const { account, password } = getBody(ctx)
-  // TODO 字段判断
-  // if (!account || !password) {
-  //   ctx.body = { code: -1, msg: '字段不能为空', data: null }
-  //   return
-  // }
-  let data = await setSchema(User, { account, password: password || '1234' })
+  const { account, password, character } = getBody(ctx)
+
+  if (!account || !password) {
+    ctx.body = { code: -1, msg: '字段不能为空', data: null }
+    return
+  }
+  const charOne = await getOne(Character, { prop: character })
+  if (!charOne) {
+    ctx.body = { code: -1, msg: '数据不存在，请联系管理员！', data: null }
+    return
+  }
+
+  let data = await setSchema(User, {
+    account,
+    password: password || '1234',
+    character
+  })
   // 不显示密码
   delete data.password
 
@@ -34,12 +45,22 @@ router.post('/add', async ctx => {
 
 router.post('/update', async ctx => {
   const params = getBody(ctx)
-  let { _id, account } = params
+  let { _id, account, character } = params
   let isExist = await getOne(User, { _id })
 
   if (isExist) {
+    if (!account) {
+      ctx.body = { code: -1, msg: '字段不能为空', data: null }
+      return
+    }
+    const charOne = await getOne(Character, { prop: character })
+    if (!charOne) {
+      ctx.body = { code: -1, msg: '数据不存在，请联系管理员！', data: null }
+      return
+    }
+
     isExist = setValue(isExist, params)
-    const data = await saveSchema(isExist, { account })
+    const data = await saveSchema(isExist, { account, character })
 
     ctx.body = { code: 0, msg: '更新成功', data }
   } else {
@@ -75,7 +96,7 @@ router.get('/list', async ctx => {
     .sort({ _id: -1 })
     .skip((page - 1) * pageSize)
     .limit(pageSize)
-  
+
   for (let i in list) {
     list[i].password = undefined
   }

@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from './routes.js'
-import { decode } from 'js-base64'
+// import { decode } from 'js-base64'
 import { useAppStore } from '@/store/modules/app'
+import { useCharacterStore } from '@/store/modules/character'
 
 export const router = createRouter({
   history: createWebHashHistory(),
@@ -9,15 +10,30 @@ export const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 
-router.beforeEach((to, from, next) => {
+const DIST_TITLE = '图书馆信息管理系统'
+
+router.beforeEach(async (to, from, next) => {
   const appStore = useAppStore()
-  document.title = (to.meta && to.meta.title) || ''
+  const characterStore = useCharacterStore()
+
+  // 设置标题
+  const documentTitle = (to.meta && to.meta.title) || ''
+  document.title = DIST_TITLE + (documentTitle && '-' + documentTitle)
+
   // 设置面包屑
   const breadCrumbList = to.matched.map(item => ({
     title: item.meta.title,
     path: item.path
   }))
   appStore.setBreadCrumb(breadCrumbList)
+
+  // 获取角色
+  try {
+    await characterStore.setCharacterList()
+  } catch (error) {
+    console.log(error, 'set-character-list-error')
+  }
+
   next()
   // const jwt = sessionStorage.getItem('jwt') || ''
 

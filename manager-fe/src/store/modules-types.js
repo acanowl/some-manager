@@ -1,2 +1,3 @@
-export const USER_INFO_KEY = 'USER_INFO_'
-export const ROUTERS_KEY = 'ROUTERS_'
+export const USER_INFO_KEY = 'USER_INFO_KEY'
+export const ROUTERS_KEY = 'ROUTERS_KEY'
+export const CHARACTER_LIST_KEY = 'CHARACTER_LIST_KEY'
