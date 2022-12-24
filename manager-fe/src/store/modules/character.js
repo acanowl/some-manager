@@ -17,6 +17,9 @@ export const useCharacterStore = defineStore({
   },
   actions: {
     async setCharacterList(params = {}) {
+      if (this.characterList.length) {
+        return
+      }
       const res = await characterListApi(params)
       const list = res.data?.rows || []
       this.characterList = list

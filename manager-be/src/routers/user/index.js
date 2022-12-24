@@ -32,13 +32,9 @@ router.post('/add', async ctx => {
     return
   }
 
-  let data = await setSchema(User, {
-    account,
-    password: password || '1234',
-    character
-  })
+  let data = await setSchema(User, { account, password, character })
   // 不显示密码
-  delete data.password
+  data.password = undefined
 
   ctx.body = { code: 0, msg: '新增成功', data }
 })

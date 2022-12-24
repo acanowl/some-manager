@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { filterAsyncRouter } from '@/utils/tool'
+import { filterAsyncRouter, clone } from '@/utils/tool'
 import { USER_INFO_KEY, ROUTERS_KEY } from '@/store/modules-types.js'
 import { layoutMap } from '@/router/routes'
 
@@ -20,7 +20,7 @@ export const useUserStore = defineStore({
   actions: {
     setUserInfo(info) {
       this.userInfo = info
-      const deepCopy = JSON.parse(JSON.stringify(layoutMap))
+      const deepCopy = clone(layoutMap)
       const accessedRouters = filterAsyncRouter(deepCopy, info.role)
       this.routers = accessedRouters
       localStorage.setItem(USER_INFO_KEY, JSON.stringify(info))
