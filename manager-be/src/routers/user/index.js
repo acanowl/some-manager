@@ -97,7 +97,7 @@ router.get('/list', async ctx => {
     list[i].password = undefined
   }
 
-  const total = list.length
+  const total = await User.countDocuments(params)
   ctx.body = {
     code: 0,
     msg: 'success',

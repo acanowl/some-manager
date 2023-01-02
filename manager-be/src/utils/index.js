@@ -7,6 +7,20 @@ const mongoose = require('mongoose')
 const getBody = ctx => ctx.request.body || {}
 
 /**
+ * 获取指定值
+ * @param {*} items
+ * @param {*} options
+ * @returns
+ */
+const getItems = (items, options) => {
+  let arr = Object.keys(options)
+  if (Array.isArray(options)) {
+    arr = options
+  }
+  return arr.reduce((obj, key) => ({ ...obj, [key]: items[key] }), {})
+}
+
+/**
  * 设置schema并获取返回值
  * @param {*} Schema 实例
  * @param {*} options
@@ -21,11 +35,7 @@ const setSchema = async (Schema, options = {}) => {
 const saveSchema = async (schema, options = {}) => {
   if (!schema) return {}
   const data = await schema.save()
-  let arr = Object.keys(options)
-  if (Array.isArray(options)) {
-    arr = options
-  }
-  return arr.reduce((obj, key) => ({ ...obj, [key]: data[key] }), {})
+  return getItems(data, options)
 }
 
 /**
@@ -44,6 +54,7 @@ const getOne = async (Schema, options) => {
 }
 
 module.exports = {
+  getItems,
   getBody,
   saveSchema,
   setSchema,

@@ -1,7 +1,8 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-const { getBody, getOne, setSchema } = require('../../utils')
+const config = require('../../project.config')
+const { getBody, getOne, setSchema, getItems } = require('../../utils')
 
 const User = mongoose.model('User')
 
@@ -44,12 +45,12 @@ router.post('/login', async ctx => {
     return
   }
 
-  const user = { account: isExist.account, id: isExist._id }
+  const user = getItems(isExist, ['account', '_id', 'character'])
 
   ctx.body = {
     code: 0,
     msg: '登陆成功',
-    data: { user, token: jwt.sign(user, 'ao-manager') }
+    data: { user, token: jwt.sign(user, config.DEFAULT_JWT_SECRET) }
   }
 })
 

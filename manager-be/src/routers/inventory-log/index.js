@@ -18,7 +18,7 @@ router.get('/list', async ctx => {
     .skip((page - 1) * pageSize)
     .limit(pageSize)
 
-  const total = list.length
+  const total = await InventoryLog.countDocuments()
   ctx.body = {
     code: 0,
     msg: 'success',
