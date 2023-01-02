@@ -4,26 +4,28 @@ import { CHARACTER_LIST_KEY } from '@/store/modules-types.js'
 
 export const useCharacterStore = defineStore({
   id: 'character',
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        storage: localStorage, //localStorage存储多个key
+        key: CHARACTER_LIST_KEY
+      }
+    ]
+  },
   state: () => ({
     characterList: []
   }),
   getters: {
     getCharacterList() {
-      return (
-        this.characterList ||
-        JSON.parse(localStorage.getItem(CHARACTER_LIST_KEY))
-      )
+      return this.characterList
     }
   },
   actions: {
     async setCharacterList(params = {}) {
-      if (this.characterList.length) {
-        return
-      }
       const res = await characterListApi(params)
       const list = res.data?.rows || []
       this.characterList = list
-      localStorage.setItem(CHARACTER_LIST_KEY, JSON.stringify(list))
     }
   }
 })

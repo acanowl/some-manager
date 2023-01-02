@@ -5,26 +5,39 @@ import { layoutMap } from '@/router/routes'
 
 export const useUserStore = defineStore({
   id: 'user',
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        storage: localStorage, //localStorage存储多个key
+        paths: ['userInfo'],
+        key: USER_INFO_KEY
+      },
+      {
+        storage: localStorage,
+        paths: ['routers'],
+        key: ROUTERS_KEY
+      }
+    ]
+  },
   state: () => ({
     userInfo: null,
     routers: []
   }),
   getters: {
     getUserInfo() {
-      return this.userInfo || JSON.parse(localStorage.getItem(USER_INFO_KEY))
+      return this.userInfo
     },
     getRouters() {
-      return this.routers.length > 0 ? this.routers : JSON.parse(localStorage.getItem(ROUTERS_KEY))
+      return this.routers
     }
   },
   actions: {
     setUserInfo(info) {
       this.userInfo = info
       const deepCopy = clone(layoutMap)
-      const accessedRouters = filterAsyncRouter(deepCopy, info.role)
+      const accessedRouters = filterAsyncRouter(deepCopy, info.character)
       this.routers = accessedRouters
-      localStorage.setItem(USER_INFO_KEY, JSON.stringify(info))
-      localStorage.setItem(ROUTERS_KEY, JSON.stringify(accessedRouters))
     }
   }
 })
