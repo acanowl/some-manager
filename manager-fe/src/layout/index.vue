@@ -5,6 +5,9 @@ header.layout-header.flex.justify-between.h-58px.bg-deep-green.px-20px
     .text-2xl.font-bold.color-white {{ systemName }}
   .flex-center
     dark-mode
+    .color-white.flex-center 
+      .px-12px 您好，{{ userStore.userInfo.account }}
+      el-link(type="primary" @click="logoutHandle") 退出
 section.layout-section.flex.flex-1.of-auto
   .layout-side.flex-col.flex-shrink-0.bg-white.w-260px(:class="{ 'w-65px': isMenuCollapse }")
     .flex-1.of-auto.of-x-hidden
@@ -25,11 +28,28 @@ import TheMenu from './components/TheMenu.vue'
 import TopBar from './components/TopBar.vue'
 // logo图片
 import { getImageUrl } from '@/utils/tool'
+import { removeToken, removeAuthed } from '@/utils/auth'
+
+import { useUserStore } from '@/store/modules/user'
+import { useCharacterStore } from '@/store/modules/character'
+
+const userStore = useUserStore()
+const characterStore = useCharacterStore()
+// 获取角色
+characterStore.setCharacterList()
+
 const logoImage = getImageUrl('library-icon')
 // 系统名称
 const systemName = '图书馆信息管理系统'
 // 菜单是否收起
 const isMenuCollapse = ref(false)
+
+const logoutHandle = () => {
+  window.location.reload()
+  localStorage.clear()
+  removeToken()
+  removeAuthed()
+}
 </script>
 
 <script>

@@ -6,6 +6,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import envVariables from '../env-variables.js'
 import { registerGlobComp } from './components/'
+import { registerGlobDir } from './directives'
 
 import App from './App.vue'
 import { createApp } from 'vue'
@@ -23,6 +24,7 @@ const app = createApp(App)
 
 // 全局组件注册
 registerGlobComp(app)
+registerGlobDir(app)
 
 // 路由 store
 app.use(router).use(pinia).mount('#app')

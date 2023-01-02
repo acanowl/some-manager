@@ -1,7 +1,8 @@
 <template lang="pug">
 el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="fromSearchItem" :formData="formData" @searchForm="getList")
-    el-button(type="primary" @click="onAddClick") 新增
+    .inline-block.pl-10px(v-auth="ROLE_SA")
+      el-button(type="primary" @click="onAddClick") 新增
   the-table.pt-20px(ref="goodsTableRef" :requestApi="goodsListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
     template(#count="{ row }")
       .flex
@@ -10,15 +11,17 @@ el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
         el-link(type="primary" @click="countChangeHandle(UPDATE_COUNT_TYPE.OUT, row)") 出库
     template(#operation="{ row }")
       .flex
-        .pr-10px
+        .pl-10px
           el-link(@click="showDetialHandle(row)") 查看
-        .pr-10px
+        .pl-10px(v-auth="ROLE_SA")
           el-link(type="primary" @click="updateHandle(row)") 编辑
-        el-link(type="danger" @click="deleteHandle(row)") 删除
+        .pl-10px(v-auth="ROLE_SA")
+          el-link(type="danger" @click="deleteHandle(row)") 删除
 form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
 <script setup>
+import { ROLE_SA } from '@/config'
 import { resultFn } from '@/utils/tool'
 import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsUpdateCountApi } from '@/api'
 

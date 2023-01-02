@@ -8,7 +8,7 @@
 const defaultCharacters = [
   {
     name: '管理员',
-    prop: 'admin',
+    prop: 'SA',
     power: {
       book: [1, 2, 3, 4],
       user: [1, 2, 3, 4]
@@ -16,7 +16,7 @@ const defaultCharacters = [
   },
   {
     name: '成员',
-    prop: 'member',
+    prop: 'ME',
     power: {
       book: [1],
       user: []

@@ -8,7 +8,9 @@ axios.defaults.baseURL = import.meta.env.VITE_GLOB_BASE_URL
 axios.interceptors.request.use(
   config => {
     if (!config.headers.Authorization) {
-      config.headers.Authorization = getToken() || ''
+      let token = getToken()
+      token = token ? `Bearer ${token}` : ''
+      config.headers.Authorization = token
     }
     return config
   },

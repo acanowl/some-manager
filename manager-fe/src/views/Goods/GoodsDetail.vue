@@ -4,9 +4,12 @@ el-card.goods-detail.flex-col(shadow="never")
     .flex.justify-between.items-center
       .text-2xl.font-bold {{ row.name }}
       .flex
-        el-button(@click="rebackHandle") 返回
-        el-button.pr-10px(@click="updateHandle(row)") 编辑
-        el-button(type="danger" @click="deleteHandle(row)") 删除
+        .pl-10px
+          el-button(@click="rebackHandle") 返回
+        .pl-10px(v-auth="ROLE_SA")
+          el-button.pr-10px(@click="updateHandle(row)") 编辑
+        .pl-10px(v-auth="ROLE_SA")
+          el-button(type="danger" @click="deleteHandle(row)") 删除
   el-row
     el-col(v-for="(item, index) in formItem" :key="index" :xs="12" :sm="12" :md="8" :lg="8" :xl="8")
       el-row.pb-10px
@@ -29,6 +32,7 @@ form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @sub
 </template>
   
 <script setup>
+import { ROLE_SA } from '@/config'
 import { useDateFormat } from '@vueuse/core'
 import { resultFn } from '@/utils/tool'
 import { goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsDetailApi, goodsInventoryLogApi } from '@/api'

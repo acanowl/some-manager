@@ -2,23 +2,23 @@
 el-scrollbar
   el-menu(router unique-opened :default-active="route.path" :collapse="props.collapse")
     div(v-for="item in routers" :key="item.name")
-      template(v-if="!item['hidden']")
+      template(v-if="!item.meta?.hidden")
         el-sub-menu(v-if="item.children && item.children.length" :index="concatPath(item.path)")
-          template(#title)
-            el-icon(:size="20")
+          template(#title) 
+            el-icon
               component(:is="item.meta.icon")
             span {{ item.meta.title }}
           div(v-for="sub in item.children" :key="sub.name")
             el-menu-item(:index="concatPath(item.path, sub.path)")
-              el-icon(:size="20")
-                component(:is="item.meta.icon")
-                  span {{ item.meta.title }}
-              template(#title) {{ item.meta.title }}
+              template(#title) 
+                el-icon
+                  component(:is="item.meta.icon")
+                span {{ item.meta.title }}
         el-menu-item(v-else :index="concatPath(item.path)")
-          el-icon(:size="20")
-            component(:is="item.meta.icon")
-              span {{ item.meta.title }}
-          template(#title) {{ item.meta.title }}
+          template(#title) 
+            el-icon
+              component(:is="item.meta.icon")
+            span {{ item.meta.title }}
 </template>
 
 <script setup>
