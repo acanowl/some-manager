@@ -2,8 +2,10 @@
 .flex.justify-between
   the-form.flex-1.pr-20px(ref="formSeachRef" :formItem="filterFormItem" v-model:formData="state.form" :colSpan="colSpan" :labelWidth="labelWidth" :noPd="true")
   .flex-shrink-0
-    el-button(type="primary" @click="searchForm") 查询
-    el-button(@click="clearData") 重置
+    .inline-block.pl-10px
+      el-button(type="primary" @click="searchForm") 查询
+    .inline-block.pl-10px
+      el-button(@click="clearData") 重置
     slot
 </template>
 
