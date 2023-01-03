@@ -26,6 +26,12 @@ const layoutMap = [
     meta: { title: '用户管理', icon: 'User', roles: [ROLE_SA] }
   },
   {
+    path: 'reset-password',
+    name: 'ResetPassword',
+    component: () => import('@/views/ResetPassword/index.vue'),
+    meta: { title: '密码重置列表', icon: 'Lock', roles: [ROLE_SA] }
+  },
+  {
     path: 'log',
     name: 'Log',
     component: () => import('@/views/Log/index.vue'),
@@ -46,15 +52,16 @@ const routes = [
     path: '/login',
     component: () => import('@/views/Login/index.vue'),
     meta: { title: '登录' }
-  },
-  {
-    path: '/reset-password',
-    component: () => import('@/views/Login/ResetPwd.vue'),
-    meta: {
-      title: '重置密码',
-      whiteList: true
-    }
   }
+  // 无法自行更改密码 无其他鉴权方式 类似手机、身份证
+  // {
+  //   path: '/reset-password',
+  //   component: () => import('@/views/Login/ResetPwd.vue'),
+  //   meta: {
+  //     title: '重置密码',
+  //     whiteList: true
+  //   }
+  // }
 ]
 
 export { routes, layoutMap }

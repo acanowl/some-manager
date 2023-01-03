@@ -10,7 +10,8 @@ el-form(ref="loginRef" :model="form" :rules="rules" label-width="0" size="large"
         i-ep-lock
   el-form-item
     el-col.text-right
-      router-link(to="/reset-password") 忘记密码？
+      el-link(:underline="false" type="primary" @click="forgotPasswordHandle") 忘记密码？
+      //- router-link(to="/reset-password") 忘记密码？
   el-form-item
     el-button.w-full(type="primary" round @click="login(loginRef)") 登录
 </template>
@@ -57,6 +58,23 @@ const login = async formEl => {
     } catch (error) {
       console.log('error submit!', error)
     }
+  }
+}
+
+const forgotPasswordHandle = async () => {
+  try {
+    const { value } = await ElMessageBox.prompt('', '请输入忘记密码的账户', {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      inputErrorMessage: '请输入账户',
+    })
+    if (value) {
+      // const res = await goodsUpdateCountApi({ num: value, id, type })
+      // const { isSuccess } = resultFn(res)
+    }
+  } catch (error) {
+    error.msg && ElNotification({ message: error.msg, type: 'error' })
+    console.log('error count change!', error)
   }
 }
 </script>
