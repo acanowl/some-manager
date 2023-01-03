@@ -1,16 +1,17 @@
 <template lang="pug">
 el-card.users.flex-1(shadow="never" :body-style="{ height: '100%' }")
   form-search(:formItem="fromSearchItem" :formData="formData" :colSpan="12" @searchForm="getList")
-    el-button(type="primary" @click="addHandle") 新增
+    .pl-10px.inline-block
+      el-button(type="primary" @click="addHandle") 新增
   the-table.pt-20px(ref="userTableRef" :requestApi="userListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
     template(#operation="{ row }")
-      .flex
-        .pr-10px
-          el-link(@click="showDetialHandle(row)") 查看
-        .pr-10px
-          el-link(type="primary" @click="updateHandle(row)") 编辑
-        .pr-10px
-          el-link(type="primary" @click="resetPasswordHandle(row)") 重置密码
+      .pr-10px.inline-block
+        el-link(@click="showDetialHandle(row)") 查看
+      .pr-10px.inline-block
+        el-link(type="primary" @click="updateHandle(row)") 编辑
+      .pr-10px.inline-block
+        el-link(type="primary" @click="resetPasswordHandle(row)") 重置密码
+      .pr-10px.inline-block
         el-link(type="danger" @click="deleteHandle(row)") 删除
 form-operation(ref="userSaveRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle" @closed="closedHandle")
 </template>

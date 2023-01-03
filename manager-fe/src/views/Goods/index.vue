@@ -10,13 +10,12 @@ el-card.goods.flex-1(shadow="never" :body-style="{ height: '100%' }")
         .px-10px {{ row.count }}
         el-link(type="primary" @click="countChangeHandle(UPDATE_COUNT_TYPE.OUT, row)") 出库
     template(#operation="{ row }")
-      .flex
-        .pl-10px
-          el-link(@click="showDetialHandle(row)") 查看
-        .pl-10px(v-auth="ROLE_SA")
-          el-link(type="primary" @click="updateHandle(row)") 编辑
-        .pl-10px(v-auth="ROLE_SA")
-          el-link(type="danger" @click="deleteHandle(row)") 删除
+      .pr-10px.inline-block
+        el-link(@click="showDetialHandle(row)") 查看
+      .pr-10px.inline-block(v-auth="ROLE_SA")
+        el-link(type="primary" @click="updateHandle(row)") 编辑
+      .pr-10px.inline-block(v-auth="ROLE_SA")
+        el-link(type="danger" @click="deleteHandle(row)") 删除
 form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @submitForm="submitHandle")
 </template>
 
