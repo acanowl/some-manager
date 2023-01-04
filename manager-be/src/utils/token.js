@@ -23,7 +23,7 @@ const koaJwtMiddle = () => {
   return koaJwt({
     secret: config.DEFAULT_JWT_SECRET
   }).unless({
-    path: [/^\/auth\/login/, /^\/auth\/register/]
+    path: [/^\/auth\/login/, /^\/auth\/register/, /^\/reset-password\/add/]
   })
 }
 

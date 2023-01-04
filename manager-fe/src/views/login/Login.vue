@@ -17,7 +17,7 @@ el-form(ref="loginRef" :model="form" :rules="rules" label-width="0" size="large"
 </template>
   
 <script setup>
-import { loginApi } from '@/api/'
+import { loginApi, resetPasswordAddApi } from '@/api/'
 // import { formRules } from '@/utils/config'
 import { resultFn } from '@/utils/tool'
 import { formValidate } from '@/utils/valid'
@@ -69,8 +69,8 @@ const forgotPasswordHandle = async () => {
       inputErrorMessage: '请输入账户',
     })
     if (value) {
-      // const res = await goodsUpdateCountApi({ num: value, id, type })
-      // const { isSuccess } = resultFn(res)
+      const res = await resetPasswordAddApi({ account: value })
+      resultFn(res)
     }
   } catch (error) {
     error.msg && ElNotification({ message: error.msg, type: 'error' })
