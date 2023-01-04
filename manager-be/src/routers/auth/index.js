@@ -24,7 +24,7 @@ router.post('/register', async ctx => {
     return
   }
 
-  const data = await setSchema(User, { account, password })
+  const data = await setSchema(User, { account, password, character: 'ME' })
 
   ctx.body = { code: 0, msg: '注册成功', data }
 })

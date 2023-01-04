@@ -24,6 +24,15 @@ const defaultCharacters = [
   }
 ]
 
+const defaultUser = [
+  {
+    account: 'admin',
+    password: '1234',
+    character: 'SA'
+  }
+]
+
 module.exports = {
-  defaultCharacters
+  defaultCharacters,
+  defaultUser
 }

@@ -59,7 +59,7 @@ const tableColumn = [
   {
     prop: 'character',
     label: '角色',
-    format: val => formCharacterList.find(item => item.value === val).label
+    format: val => formCharacterList.find(item => item.value === val)?.label || '未知用户'
   },
   {
     prop: 'meta.createdAt',

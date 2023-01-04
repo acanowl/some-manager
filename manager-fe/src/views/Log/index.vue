@@ -1,6 +1,6 @@
 <template lang="pug">
 el-card.system-log.flex-1(shadow="never" :body-style="{ height: '100%' }")
-  the-table.pt-20px(ref="systemListTableRef" :requestApi="systemLogListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
+  the-table(ref="systemListTableRef" :requestApi="systemLogListApi" :column="tableColumn" :innerPadding="cptInnerPadding")
     template(#operation="{ row }")
       el-link(type="danger" @click="deleteHandle(row)") 删除
 </template>
