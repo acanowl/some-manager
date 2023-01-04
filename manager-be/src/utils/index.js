@@ -13,11 +13,11 @@ const getBody = ctx => ctx.request.body || {}
  * @returns
  */
 const getItems = (items, options) => {
-  let arr = Object.keys(options)
-  if (Array.isArray(options)) {
-    arr = options
-  }
-  return arr.reduce((obj, key) => ({ ...obj, [key]: items[key] }), {})
+	let arr = Object.keys(options)
+	if (Array.isArray(options)) {
+		arr = options
+	}
+	return arr.reduce((obj, key) => ({ ...obj, [key]: items[key] }), {})
 }
 
 /**
@@ -27,15 +27,15 @@ const getItems = (items, options) => {
  * @returns
  */
 const setSchema = async (Schema, options = {}) => {
-  if (!Schema) return {}
-  const schema = new Schema(options)
-  return await saveSchema(schema, options)
+	if (!Schema) return {}
+	const schema = new Schema(options)
+	return await saveSchema(schema, options)
 }
 
 const saveSchema = async (schema, options = {}) => {
-  if (!schema) return {}
-  const data = await schema.save()
-  return getItems(data, options)
+	if (!schema) return {}
+	const data = await schema.save()
+	return getItems(data, options)
 }
 
 /**
@@ -45,18 +45,28 @@ const saveSchema = async (schema, options = {}) => {
  * @returns
  */
 const getOne = async (Schema, options) => {
-  const { _id: id } = options
-  // 如果入参有_id，则判断是否有效
-  if (!Schema || (id && !mongoose.Types.ObjectId.isValid(id))) {
-    return false
-  }
-  return await Schema.findOne(options)
+	const { _id: id } = options
+	// 如果入参有_id，则判断是否有效
+	if (!Schema || (id && !mongoose.Types.ObjectId.isValid(id))) {
+		return false
+	}
+	return await Schema.findOne(options)
+}
+
+const setValue = (origin, params) => {
+	Object.entries(params).forEach(([key, value]) => {
+		if (value) {
+			origin[key] = value
+		}
+	})
+	return origin
 }
 
 module.exports = {
-  getItems,
-  getBody,
-  saveSchema,
-  setSchema,
-  getOne
+	getItems,
+	getBody,
+	saveSchema,
+	setSchema,
+	getOne,
+	setValue
 }

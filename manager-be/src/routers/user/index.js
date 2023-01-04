@@ -1,6 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
-const { getBody, getOne, setSchema, saveSchema } = require('../../utils')
+const { getBody, getOne, setSchema, saveSchema, setValue } = require('../../utils')
 const config = require('../../project.config')
 
 const User = mongoose.model('User')
@@ -9,15 +9,6 @@ const Character = mongoose.model('Character')
 const router = new Router({
   prefix: '/user'
 })
-
-const setValue = (origin, params) => {
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) {
-      origin[key] = value
-    }
-  })
-  return origin
-}
 
 router.post('/add', async ctx => {
   const { account, password, character } = getBody(ctx)

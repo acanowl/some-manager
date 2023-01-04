@@ -1,6 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
-const { getBody, getOne, setSchema, saveSchema } = require('../../utils')
+const { getBody, getOne, setSchema, saveSchema, setValue } = require('../../utils')
 
 const Goods = mongoose.model('Goods')
 const InventoryLog = mongoose.model('InventoryLog')
@@ -14,15 +14,6 @@ const UPDATE_COUNT_TYPE = { IN: 1, OUT: 0 }
 const getParams = params => {
   const { name, author, date, classfiy, price, count } = params
   return { name, author, date, classfiy, price, count }
-}
-
-const setValue = (origin, params) => {
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) {
-      origin[key] = value
-    }
-  })
-  return origin
 }
 
 router.post('/add', async ctx => {
