@@ -14,7 +14,7 @@ import { clone } from '@/utils/tool'
 
 const formSeachRef = ref(null)
 
-const { formItem, formData } = defineProps({
+const props = defineProps({
   // 表单
   formItem: { type: Array, default: () => [] },
   // 表单数据
@@ -24,11 +24,11 @@ const { formItem, formData } = defineProps({
 })
 
 const state = reactive({ form: {} })
-state.form = clone(formData)
+state.form = clone(props.formData)
 
 // 目前仅提供下拉 文本及日期筛选
 const formTypeLimit = ['select', 'text', 'daterange']
-const filterFormItem = computed(() => formItem.filter(item => formTypeLimit.includes(item.type)))
+const filterFormItem = computed(() => props.formItem.filter(item => formTypeLimit.includes(item.type)))
 
 const emits = defineEmits(['searchForm', 'clearForm'])
 
