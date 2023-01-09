@@ -22,7 +22,7 @@ form-operation(ref="goodsSaveRef" :formItem="formItem" :formData="formData" @sub
 <script setup>
 import { ROLE_SA } from '@/config'
 import { resultFn } from '@/utils/tool'
-import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsUpdateCountApi } from '@/api'
+import { goodsListApi, goodsAddApi, goodsDeleteApi, goodsUpdateApi, goodsUpdateCountApi, goodsClassifyListApi } from '@/api'
 
 const router = useRouter()
 
@@ -34,31 +34,30 @@ const cptInnerPadding = computed(() => 'var(--el-card-padding) * 2')
 const UPDATE_COUNT_TYPE = { IN: 1, OUT: 0 }
 const OPERATION_FORM_TYPE = { ADD: 'add', EDIT: 'edit' }
 
-const classfiyMap = [
-  { label: '小说', value: '0' },
-  { label: '文学', value: '1' },
-  { label: '科技', value: '2' },
-  { label: '经济', value: '3' },
-  { label: '法律', value: '4' },
-  { label: '历史', value: '5' },
-  { label: '哲学', value: '6' },
-  { label: '艺术', value: '7' }
-]
+let classfiyMap = ref(null)
 
-const fromSearchItem = [
+// 获取商品类型
+const getClassifyList = async () => {
+  const classfiyResult = await goodsClassifyListApi({ status: '1'})
+  classfiyMap.value = classfiyResult.data.rows.map(item => ({ label: item.label, value: `${item.id}`}))
+}
+
+getClassifyList()
+
+const fromSearchItem = computed(() => [
   { label: '书名', prop: 'name', type: 'text' },
   { label: '作者', prop: 'author', type: 'text' },
-  { label: '类型', prop: 'classfiy', type: 'select', children: classfiyMap }
-]
+  { label: '类型', prop: 'classfiy', type: 'select', children: classfiyMap.value }
+])
 
-const formItem = [
+const formItem = computed(() => [
   { label: '书名', prop: 'name', type: 'text' },
   { label: '作者', prop: 'author', type: 'text' },
   { label: '出版日期', prop: 'date', type: 'date' },
-  { label: '类型', prop: 'classfiy', type: 'select', children: classfiyMap },
+  { label: '类型', prop: 'classfiy', type: 'select', children: classfiyMap.value },
   { label: '价格', prop: 'price', type: 'number' },
   { label: '库存', prop: 'count', type: 'number' }
-]
+])
 const formData = reactive({ name: '', author: '', date: '', classfiy: '' })
 
 const tableColumn = [
@@ -81,7 +80,7 @@ const tableColumn = [
   {
     prop: 'classfiy',
     label: '类型',
-    format: val => classfiyMap.filter(item => item.value == val)[0]?.label
+    format: val => classfiyMap.value.filter(item => item.value == val)[0]?.label || '未知'
   },
   {
     prop: 'price',
