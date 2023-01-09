@@ -32,6 +32,12 @@ const layoutMap = [
     meta: { title: '密码重置列表', icon: 'Lock', roles: [ROLE_SA] }
   },
   {
+    path: 'goods-classify',
+    name: 'GoodsClassify',
+    component: () => import('@/views/GoodsClassify/index.vue'),
+    meta: { title: '商品分类', icon: 'Coin', roles: [ROLE_SA] }
+  },
+  {
     path: 'log',
     name: 'Log',
     component: () => import('@/views/Log/index.vue'),
