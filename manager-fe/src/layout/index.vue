@@ -11,7 +11,7 @@ header.layout-header.flex.justify-between.h-58px.bg-deep-green.px-20px
 section.layout-section.flex.flex-1.of-auto
   .layout-side.flex-col.flex-shrink-0.bg-white.w-260px(:class="{ 'w-65px': isMenuCollapse }")
     .flex-1.of-auto.of-x-hidden
-      the-menu(:collapse="isMenuCollapse")
+      the-menu(:collapse="isMenuCollapse" :routers="routers")
     .layout-collapse.h-50px.flex-center.cursor-pointer(@click="isMenuCollapse = !isMenuCollapse")
       i-ep-expand(v-if="isMenuCollapse")
       i-ep-fold(v-else)
@@ -37,6 +37,8 @@ const userStore = useUserStore()
 const characterStore = useCharacterStore()
 // 获取角色
 characterStore.setCharacterList()
+// 获取路由
+const routers = computed(() => userStore.getRouters.filter(item => !item.meta?.hidden))
 
 const logoImage = getImageUrl('library-icon')
 // 系统名称

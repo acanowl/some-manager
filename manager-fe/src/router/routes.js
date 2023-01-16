@@ -38,6 +38,34 @@ const layoutMap = [
     meta: { title: '商品分类', icon: 'Coin', roles: [ROLE_SA] }
   },
   {
+    path: 'setting',
+    name: 'Setting',
+    component: () => import('@/views/Setting/index.vue'),
+    meta: {
+      title: '个人设置',
+      icon: 'Setting',
+      roles: [ROLE_SA, ROLE_ME],
+      isBarIgnore: true
+    },
+    children: [
+      {
+        path: 'change-password',
+        name: 'ChangePassword',
+        component: () => import('@/views/Setting/ChangePassword/index.vue'),
+        meta: { title: '修改密码', icon: 'EditPen', roles: [ROLE_SA, ROLE_ME] }
+        // FIXME 无法多层子路由
+        // children: [
+        //   {
+        //     path: 'change-password',
+        //     name: 'ChangePassword',
+        //     component: () => import('@/views/Setting/ChangePassword/index.vue'),
+        //     meta: { title: '修改密码', icon: 'EditPen', roles: [ROLE_SA, ROLE_ME] }
+        //   }
+        // ]
+      }
+    ]
+  },
+  {
     path: 'log',
     name: 'Log',
     component: () => import('@/views/Log/index.vue'),

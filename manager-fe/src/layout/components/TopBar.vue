@@ -12,7 +12,7 @@ const breadcrumbData = computed(() => userStore.getBreadCrumb)
 const router = useRouter()
 const cptBreadcrumbItemBind = computed(() => {
   return item => {
-    if (router.currentRoute.value.path === item.path) {
+    if (router.currentRoute.value.path === item.path || item.disabled) {
       return {}
     }
     return { to: { path: item.path } }
@@ -30,4 +30,3 @@ export default { name: 'top-bar' }
   box-shadow: 0 1px 4px rgba($color: $color-deep-green, $alpha: 0.08);
 }
 </style>
-    
