@@ -8,6 +8,7 @@ const {
 	setValue
 } = require('../../utils')
 const config = require('../../project.config')
+const { verify, getToken } = require('../../utils/token')
 
 const ResetPassword = mongoose.model('ResetPassword')
 const User = mongoose.model('User')
@@ -75,6 +76,25 @@ router.post('/changeStatus', async ctx => {
 	} else {
 		ctx.body = { code: -1, msg: '数据不存在，请联系管理员！' }
 	}
+})
+
+router.post('/reset', async ctx => {
+	const { curPassword, newPassword, verifyPassword } = getBody(ctx)
+
+	const c = await verify(getToken(ctx))
+	console.log(c)
+	// if (!curPassword || newPassword || verifyPassword) {
+	// 	ctx.body = { code: -1, msg: '字段不能为空', data: null }
+	// 	return
+	// }
+	// let userOne = await getOne(User, { account })
+
+	// let data = { account, status: 1 }
+	// if (userOne) {
+	// 	data = await setSchema(ResetPassword, data)
+	// }
+
+	ctx.body = { code: 0, msg: '新增成功', data: null }
 })
 
 module.exports = router

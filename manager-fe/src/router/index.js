@@ -29,7 +29,6 @@ router.beforeEach(async (to, from, next) => {
       return false
     }
     if (isLogin) {
-      console.log(to.matched, 'to.matched?')
       // 设置面包屑
       const breadCrumbList = to.matched.map(item => ({
         title: item.meta.title,

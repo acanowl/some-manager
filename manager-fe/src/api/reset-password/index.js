@@ -22,3 +22,10 @@ export const resetPasswordAddApi = params => post(`${prefix}/add`, params)
  * @returns
 */
 export const changeAccountStatusApi = params => post(`${prefix}/changeStatus`, params)
+
+/**
+ * 修改接口
+ * @param {*} params
+ * @returns
+*/
+export const changePasswordStatusApi = params => post(`${prefix}/reset`, params)
