@@ -53,15 +53,6 @@ const layoutMap = [
         name: 'ChangePassword',
         component: () => import('@/views/Setting/ChangePassword/index.vue'),
         meta: { title: '修改密码', icon: 'EditPen', roles: [ROLE_SA, ROLE_ME] }
-        // FIXME 无法多层子路由
-        // children: [
-        //   {
-        //     path: 'change-password',
-        //     name: 'ChangePassword',
-        //     component: () => import('@/views/Setting/ChangePassword/index.vue'),
-        //     meta: { title: '修改密码', icon: 'EditPen', roles: [ROLE_SA, ROLE_ME] }
-        //   }
-        // ]
       }
     ]
   },

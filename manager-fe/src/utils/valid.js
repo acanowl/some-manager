@@ -22,3 +22,10 @@ export const formValidate = async (instance, autoShowMessage = true) => {
     return false
   }
 }
+
+/**
+ * 判断path是否为外链
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export const isExternal = path => /^(https?:|mailto:|tel:)/.test(path)

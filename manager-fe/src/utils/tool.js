@@ -42,3 +42,19 @@ export const getImageUrl = name => {
  * @returns
  */
 export const clone = value => JSON.parse(JSON.stringify(value))
+
+/**
+ * 返回项目路径
+ * @param {*} p
+ * @returns
+ */
+export const getNormalPath = p => {
+  if (p.length === 0 || !p || p == 'undefined') {
+    return p
+  }
+  let res = p.replace('//', '/')
+  if (res[res.length - 1] === '/') {
+    return res.slice(0, res.length - 1)
+  }
+  return res
+}
